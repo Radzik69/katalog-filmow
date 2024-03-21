@@ -1,30 +1,27 @@
 <?php
 session_start();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGN UP</title>
-    <link rel="stylesheet" href="styleAccounts.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIGN UP</title>
+  <link rel="stylesheet" href="styleAccounts.css">
 </head>
-
-
 
 <body id="bodyRegisterLogin">
 
-    <div id="divRegisterLogin">
+  <div id="divRegisterLogin">
 
-        <form action="signup.php" method="POST">
-            <input type="text" placeholder="LOGIN" name="login" class="inputIndex">
-            <input type="password" name="password" placeholder="PASSWORD" class="inputIndex">
-            <input type="submit" value="LOGIN" class="inputIndex">
-        </form>
+    <form action="signup.php" method="POST">
+      <input type="text" placeholder="LOGIN" name="login" class="inputIndex">
+      <input type="password" name="password" placeholder="PASSWORD" class="inputIndex">
+      <input type="submit" value="LOGIN" class="inputIndex">
+    </form>
 
-        <?php
+    <?php
 
         if (isset ($_POST["login"]) && isset ($_POST["password"])) {
 
@@ -58,9 +55,7 @@ session_start();
             mysqli_close($conn);
         }
         ?>
-    </div>
-
-
+  </div>
 
 </body>
 
