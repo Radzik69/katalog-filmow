@@ -1,0 +1,95 @@
+#bodyMain{
+  margin: 0;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 10vh 90vh;
+  grid-template-areas: "menu,middle";
+  background-color: dimgray;
+}
+
+#menu{
+  grid-area: "menu";
+  display: grid;
+  grid-template-columns: 15% 60% 25%;
+  grid-template-rows: 10vh;
+  grid-template-areas: "buttonToMain,search,account";
+}
+
+#buttonToMain{
+  grid-area: "buttonToMain";
+  border: 5px black solid;
+
+}
+
+#searchDiv{
+  grid-area: "search";
+  border: 5px black solid;
+
+}
+
+#account{
+  grid-area: "account";
+  border: 5px black solid;
+
+}
+
+#middle{
+  grid-area: "middle";
+  display: grid;
+  grid-template-columns: 15% 0% 85%;
+  grid-template-rows: 90vh;
+  grid-template-areas: "Links,phpSearchDiv,main";
+}
+
+#Links{
+  grid-area: "Links";
+}
+
+#phpSearchDiv{
+  grid-area: "phpSearchDiv";
+}
+
+#main{
+  grid-area: "main";
+  background-color: aquamarine;
+}
+
+#searchForm{
+  height: 93%;
+}
+
+#search{
+  width: 90%;
+  height: 100%;
+}
+
+#phpSearchDiv{
+background-color: chartreuse;
+position: relative;
+}
+
+.imageSearchClass{
+  height: 30px;
+}
+
+.nameSearchClass{
+  height: 30px;
+  width: 100%;
+  font-size: 20px;
+  margin: 0;
+  margin-left: 30px;
+  margin-top: -30px;
+}
+.divSearchClass{
+  width: 98%;
+  height: 30px;
+  border: 1px black solid;
+  display: grid;
+  grid-template-areas: "form";
+}
+
+.filmDetails{
+height: 30px;
+grid-area: "form";
+}
+
