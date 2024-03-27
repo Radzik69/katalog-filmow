@@ -111,5 +111,9 @@ grid-area: "form";
 
 
 #searchSubmit {
-  margin-left: 10px; /* Add margin between input field and submit button */
+  height: 85px;
+}
+
+.buttonsChangeSearch{
+  margin-bottom: 5px;
 }

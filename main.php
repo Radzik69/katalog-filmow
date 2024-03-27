@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +14,6 @@
 <body id="bodyMain">
 
     <?php
-    session_start();
     if (!$_SESSION["zalogowano"] == true) {
         header('Location: ./index.php');
         exit;
@@ -30,25 +32,76 @@
             die ("Connection failed: " . mysqli_connect_error());
         }
 
-        $sql = "SELECT id, movieName, popularity,poster_path FROM movies WHERE movieName LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
-        $result = mysqli_query($conn, $sql);
+        if ($_COOKIE["chosenButton"] == "movie") {
+            $sql = "SELECT id, movieName, popularity,poster_path FROM movies WHERE movieName LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
 
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
-                echo
-                    "
+            $result = mysqli_query($conn, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
+                    echo
+                        "
               <div class='divSearchClass'>
-              <form action='filmDetails.php' method='POST' class='filmDetails'>
+              <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
                 <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[poster_path]'>
                 <p class='nameSearchClass'>$row[movieName]</p>
-                <input type='text' value='$row[id]' name='filmId' hidden='true'>
+                <input type='text' value='$row[id]' name = 'filmId' id='filmId' hidden='true'>
                 </form>
               </div>
               ";
+                }
+            } else {
+                echo "0 results";
             }
-        } else {
-            echo "0 results";
+        }
+
+        if ($_COOKIE["chosenButton"] == "series") {
+            $sql = "SELECT id, seriesTitle, popularity,poster_path FROM series WHERE seriesTitle LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
+
+            $result = mysqli_query($conn, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
+                    echo
+                        "
+              <div class='divSearchClass'>
+              <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
+                <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[poster_path]'>
+                <p class='nameSearchClass'>$row[seriesTitle]</p>
+                <input type='text' value='$row[id]' name = 'filmId' id='filmId' hidden='true'>
+                </form>
+              </div>
+              ";
+                }
+            } else {
+                echo "0 results";
+            }
+        }
+
+        if ($_COOKIE["chosenButton"] == "people") {
+            $sql = "SELECT id, name, popularity,profile_path FROM people WHERE name LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
+
+            $result = mysqli_query($conn, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
+                    echo
+                        "
+              <div class='divSearchClass'>
+              <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
+                <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[profile_path]'>
+                <p class='nameSearchClass'>$row[name]</p>
+                <input type='text' value='$row[id]' name = 'filmId' id='filmId' hidden='true'>
+                </form>
+              </div>
+              ";
+                }
+            } else {
+                echo "0 results";
+            }
         }
 
         mysqli_close($conn);
@@ -60,9 +113,9 @@
         <div id="searchDiv">
             <form action="" method="POST" id="searchForm">
                 <div id="searchButtons">
-                    <button>MOVIES</button>
-                    <button>SERIES</button>
-                    <button>PEOPLE</button>
+                    <button type="button" class="buttonsChangeSearch">MOVIES</button>
+                    <button type="button" class="buttonsChangeSearch">SERIES</button>
+                    <button type="button" class="buttonsChangeSearch">PEOPLE</button>
                 </div>
                 <input type="text" name="search" id="search" placeholder="SEARCH">
                 <input type="submit" value="CLICK" id="searchSubmit">
@@ -81,30 +134,52 @@
 
     <script>
 
+        const buttons = document.getElementsByClassName("buttonsChangeSearch")
+
+        var myFunction = function myFunction(i) {
+
+            if (i == 0) {
+                document.cookie = "chosenButton=movie"
+            } else if (i == 1) {
+                document.cookie = "chosenButton=series"
+            } else if (i == 2) {
+                document.cookie = "chosenButton=people"
+            } else {
+                document.cookie = "chosenButton=movie"
+            }
+        }
+
+        for (i = 0; i < 3; i++) {
+            buttons[i].addEventListener('click', myFunction.bind(this, i), false)
+        }
+
+
+    </script>
+
+
+    <script>
+
         const phpSearchDiv = document.getElementById('phpSearchDiv');
+        const divSearchClass = document.getElementsByClassName('divSearchClass');
+        var i
 
-        const observer = new MutationObserver(mutationsList => {
-            for (var mutation of mutationsList) {
-                if (mutation.type === 'attributes') {
-                    console.log("jebac")
+        var myFunction = function myFunction(i) {
+            const inputDivClicked = divSearchClass[i].querySelector('input[type="text"]');
+            const form = divSearchClass[i].querySelector('form')
+            inputDivClicked.setAttribute("value", inputDivClicked.value)
+            form.submit()
+        };
+        var Interval = setInterval(function test() {
+            for (i = 0; i < 20; i++) {
 
-                    // var elements = document.getElementsByClassName("divSearchClass");
-                    // function myFunction() {
-                    //     console.log("test")
-                    // };
-
-                    // for (var i = 0; i < 20; i++) {
-                    //     elements[i].addEventListener('click', myFunction(), false)
-                    // }
+                if (document.body.contains(divSearchClass[0])) {
+                    divSearchClass[i].addEventListener('click', myFunction.bind(this, i), false)
+                    setTimeout(function test1() {
+                        clearInterval(Interval)
+                    }, 1)
                 }
             }
-        });
-
-        // Start observing the target div for changes
-        observer.observe(phpSearchDiv, { attributes: true, subtree: false });
-
-
-
+        }, 50,)
 
 
     </script>
@@ -134,6 +209,7 @@
 
             phpSearchDiv.style.height = '100%';
             phpSearchDiv.style.width = '85vh';
+            phpSearchDiv.setAttribute("class", "changed")
         });
 
     </script>

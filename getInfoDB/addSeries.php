@@ -7,7 +7,8 @@ $popularity = 0;
 $apiKey = 'db19ef3917f1c47d50bef7c71cef586f';
 $page = 1; // Starting page
 
-function fetchSeries($page) {
+function fetchSeries($page)
+{
     global $apiKey;
     $endpoint = 'tv/popular'; // Changed to TV series endpoint
     $params = array(
@@ -16,7 +17,8 @@ function fetchSeries($page) {
     return fetchData($endpoint, $params);
 }
 
-function fetchData($endpoint, $params = array()) {
+function fetchData($endpoint, $params = array())
+{
     global $apiKey;
     $url = 'https://api.themoviedb.org/3/' . $endpoint;
     $params['api_key'] = $apiKey;
@@ -29,22 +31,23 @@ function fetchData($endpoint, $params = array()) {
 // Fetch and display information about every TV series
 while (true) {
     $series = fetchSeries($page);
-    if (empty($series['results'])) {
+    if (empty ($series['results'])) {
         break; // No more series available
     }
-    
+
     foreach ($series['results'] as $serie) {
         $seriesName = $serie['name'];
         $id = $serie['id'];
         $popularity = $serie['popularity'];
-        
+        $poster_path = $serie['poster_path'];
+
         $server = "localhost";
         $dbuser = "root";
         $dbpassword = "";
         $dbname = "katalog-filmow";
 
         $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
-        $sql = "INSERT INTO `series`(`id`, `seriesTitle`, `popularity`) VALUES ('$id','$seriesName','$popularity')";
+        $sql = "INSERT INTO `series`(`id`, `seriesTitle`, `popularity`,`poster_path`) VALUES ('$id','$seriesName','$popularity','$poster_path')";
 
         try {
             $query = mysqli_query($conn, $sql);
