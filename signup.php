@@ -23,38 +23,39 @@ session_start();
 
     <?php
 
-        if (isset ($_POST["login"]) && isset ($_POST["password"])) {
+    if (isset($_POST["login"]) && isset($_POST["password"])) {
 
-            $login = $_POST["login"];
-            $password = $_POST["password"];
+      $login = $_POST["login"];
+      $password = $_POST["password"];
 
-            $server = "localhost";
-            $dbuser = "root";
-            $dbpassword = "";
-            $dbname = "katalog-filmow";
-
-
-            $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
-            $sql = "SELECT login,password,rights FROM users WHERE login='$login' AND password='$password'";
-
-            $query = mysqli_query($conn, $sql);
+      $server = "localhost";
+      $dbuser = "root";
+      $dbpassword = "";
+      $dbname = "katalog-filmow";
 
 
-            if (mysqli_num_rows($query) > 0) {
-                $_SESSION["zalogowano"] = "true";
-                $row = mysqli_fetch_assoc($query);
-                $_SESSION["user"] = $row["login"];
-                $_SESSION["rights"] = $row["rights"];
-                header('Location: ./main.php');
-                exit;
-            } else {
-                $row = mysqli_fetch_assoc($query);
-                echo "<h1>LOGIN CREDENTIALS ARE WRONG</h1>";
-            }
+      $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
+      $sql = "SELECT login,password,rights FROM users WHERE login='$login' AND password='$password'";
 
-            mysqli_close($conn);
-        }
-        ?>
+      $query = mysqli_query($conn, $sql);
+
+
+      if (mysqli_num_rows($query) > 0) {
+        $_SESSION["zalogowano"] = "true";
+        $row = mysqli_fetch_assoc($query);
+        $_SESSION["user"] = $row["login"];
+        $_SESSION["password"] = $row["password"];
+        $_SESSION["rights"] = $row["rights"];
+        header('Location: ./main.php');
+        exit;
+      } else {
+        $row = mysqli_fetch_assoc($query);
+        echo "<h1>LOGIN CREDENTIALS ARE WRONG</h1>";
+      }
+
+      mysqli_close($conn);
+    }
+    ?>
   </div>
 
 </body>

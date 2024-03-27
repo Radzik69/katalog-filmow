@@ -31,7 +31,7 @@
 #account{
   grid-area: "account";
   border: 5px black solid;
-
+  position: relative;
 }
 
 #middle{
@@ -53,7 +53,6 @@
 
 #main{
   grid-area: "main";
-  background-color: aquamarine;
 }
 
 #searchForm{
@@ -70,7 +69,6 @@
 }
 
 #phpSearchDiv{
-background-color: chartreuse;
 position: relative;
 }
 
@@ -116,4 +114,15 @@ grid-area: "form";
 
 .buttonsChangeSearch{
   margin-bottom: 5px;
+}
+
+#buttonAccount{
+  width: 80%;
+  height: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 30px;
 }
