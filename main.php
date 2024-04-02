@@ -16,34 +16,33 @@ session_start();
 
   <?php
 
-    if (!$_SESSION["zalogowano"] == true) {
-        header('Location: ./index.php');
-        exit;
+  if (!$_SESSION["zalogowano"] == true) {
+    header('Location: ./index.php');
+    exit;
+  }
+
+  if (isset($_POST['search'])) {
+    $search_query = $_POST['search'];
+
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "katalog-filmow";
+
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    if (!$conn) {
+      die("Connection failed: " . mysqli_connect_error());
     }
 
-    if (isset($_POST['search'])) {
-        $search_query = $_POST['search'];
+    if ($_COOKIE["chosenButton"] == "movie") {
+      $sql = "SELECT id, movieName, popularity,poster_path FROM movies WHERE movieName LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
 
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "katalog-filmow";
+      $result = mysqli_query($conn, $sql);
 
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-
-        if ($_COOKIE["chosenButton"] == "movie") {
-            $sql = "SELECT id, movieName, popularity,poster_path FROM movies WHERE movieName LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
-
-            $result = mysqli_query($conn, $sql);
-
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
-                    echo
-                        "
+      if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+          echo
+            "
               <div class='divSearchClass'>
               <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
                 <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[poster_path]' fetchpriority='high'>
@@ -52,22 +51,22 @@ session_start();
                 </form>
               </div>
               ";
-                }
-            } else {
-                echo "0 results";
-            }
         }
+      } else {
+        echo "0 results";
+      }
+    }
 
-        if ($_COOKIE["chosenButton"] == "series") {
-            $sql = "SELECT id, seriesTitle, popularity,poster_path FROM series WHERE seriesTitle LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
+    if ($_COOKIE["chosenButton"] == "series") {
+      $sql = "SELECT id, seriesTitle, popularity,poster_path FROM series WHERE seriesTitle LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
 
-            $result = mysqli_query($conn, $sql);
+      $result = mysqli_query($conn, $sql);
 
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
-                    echo
-                        "
+      if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+          //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
+          echo
+            "
               <div class='divSearchClass'>
               <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
                 <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[poster_path]'>
@@ -76,22 +75,22 @@ session_start();
                 </form>
               </div>
               ";
-                }
-            } else {
-                echo "0 results";
-            }
         }
+      } else {
+        echo "0 results";
+      }
+    }
 
-        if ($_COOKIE["chosenButton"] == "people") {
-            $sql = "SELECT id, name, popularity,profile_path FROM people WHERE name LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
+    if ($_COOKIE["chosenButton"] == "people") {
+      $sql = "SELECT id, name, popularity,profile_path FROM people WHERE name LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
 
-            $result = mysqli_query($conn, $sql);
+      $result = mysqli_query($conn, $sql);
 
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
-                    echo
-                        "
+      if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+          //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
+          echo
+            "
               <div class='divSearchClass'>
               <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
                 <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[profile_path]'>
@@ -100,20 +99,20 @@ session_start();
                 </form>
               </div>
               ";
-                }
-            } else {
-                echo "0 results";
-            }
         }
-
-        mysqli_close($conn);
-        exit;
+      } else {
+        echo "0 results";
+      }
     }
-    ?>
+
+    mysqli_close($conn);
+    exit;
+  }
+  ?>
   <div id="menu">
     <div id="buttonToMain"></div>
     <div id="searchDiv">
-      <form action="" method="POST" id="searchForm">
+      <form action="formSearchSubmited.php" method="POST" id="searchForm">
         <div id="searchButtons">
           <button type="button" class="buttonsChangeSearch">MOVIES</button>
           <button type="button" class="buttonsChangeSearch">SERIES</button>
@@ -126,9 +125,9 @@ session_start();
     <div id="account">
       <?php
 
-            echo "<button id='buttonAccount' type='submit'>$_SESSION[user]</button>";
+      echo "<button id='buttonAccount' type='submit' onclick=buttonClickList()>$_SESSION[user]</button>";
 
-            ?>
+      ?>
     </div>
   </div>
   <div id="middle">
@@ -139,6 +138,30 @@ session_start();
     <div id="main">
     </div>
   </div>
+
+  <script>
+  const button = document.getElementById("buttonAccount")
+
+
+  function buttonClickList() {
+    const select = document.createElement("select")
+    select.setAttribute("id", "selectInAccount")
+    button.appendChild(select)
+
+    const option1 = document.createElement("option")
+    option1.setAttribute("value", "LOG OUT")
+    option1.innerHTML = "LOG OUT"
+    select.appendChild(option1)
+
+    const option2 = document.createElement("option")
+    option2.setAttribute("value", "WATCHLIST")
+    option2.innerHTML = "WATCHLIST"
+
+    select.appendChild(option2)
+
+    button.onclick = ""
+  }
+  </script>
 
   <script>
   const buttons = document.getElementsByClassName("buttonsChangeSearch")
