@@ -6,43 +6,43 @@ session_start();
 
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body id="bodyMain">
 
-  <?php
+    <?php
 
-  if (!$_SESSION["zalogowano"] == true) {
-    header('Location: ./index.php');
-    exit;
-  }
-
-  if (isset($_POST['search'])) {
-    $search_query = $_POST['search'];
-
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "katalog-filmow";
-
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    if (!$conn) {
-      die("Connection failed: " . mysqli_connect_error());
+    if (!$_SESSION["zalogowano"] == true) {
+        header('Location: ./index.php');
+        exit;
     }
 
-    if ($_COOKIE["chosenButton"] == "movie") {
-      $sql = "SELECT id, movieName, popularity,poster_path FROM movies WHERE movieName LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
+    if (isset($_POST['search'])) {
+        $search_query = $_POST['search'];
 
-      $result = mysqli_query($conn, $sql);
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "katalog-filmow";
 
-      if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-          echo
-            "
+        $conn = mysqli_connect($servername, $username, $password, $dbname);
+        if (!$conn) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+
+        if ($_COOKIE["chosenButton"] == "movie") {
+            $sql = "SELECT id, movieName, popularity,poster_path FROM movies WHERE movieName LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
+
+            $result = mysqli_query($conn, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo
+                        "
               <div class='divSearchClass'>
               <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
                 <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[poster_path]' fetchpriority='high'>
@@ -51,190 +51,182 @@ session_start();
                 </form>
               </div>
               ";
+                }
+            } else {
+                echo "0 results";
+            }
         }
-      } else {
-        echo "0 results";
-      }
-    }
 
-    if ($_COOKIE["chosenButton"] == "series") {
-      $sql = "SELECT id, seriesTitle, popularity,poster_path FROM series WHERE seriesTitle LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
+        if ($_COOKIE["chosenButton"] == "series") {
+            $sql = "SELECT id, seriesTitle, popularity,poster_path FROM series WHERE seriesTitle LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
 
-      $result = mysqli_query($conn, $sql);
+            $result = mysqli_query($conn, $sql);
 
-      if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-          //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
-          echo
-            "
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo
+                        "
               <div class='divSearchClass'>
-              <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
+              <form action='Details/seriesDetails.php' method='POST' class='filmDetails'>
                 <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[poster_path]'>
                 <p class='nameSearchClass'>$row[seriesTitle]</p>
                 <input type='text' value='$row[id]' name = 'filmId' id='filmId' hidden='true'>
+                
                 </form>
               </div>
               ";
+                }
+            } else {
+                echo "0 results";
+            }
         }
-      } else {
-        echo "0 results";
-      }
-    }
 
-    if ($_COOKIE["chosenButton"] == "people") {
-      $sql = "SELECT id, name, popularity,profile_path FROM people WHERE name LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
+        if ($_COOKIE["chosenButton"] == "people") {
+            $sql = "SELECT id, name, popularity,profile_path FROM people WHERE name LIKE '$search_query%' GROUP BY POPULARITY DESC LIMIT 20";
 
-      $result = mysqli_query($conn, $sql);
+            $result = mysqli_query($conn, $sql);
 
-      if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-          //DODAC NA DOLE FORMA I DIVA DO DIVA EVENT LISTENER ZEBY PO KLIOKNIECIU DIVA WYSYLALO ID NA NOWA PODSTRONE
-          echo
-            "
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo
+                        "
               <div class='divSearchClass'>
-              <form action='Details/movieDetails.php' method='POST' class='filmDetails'>
+              <form action='Details/peopleDetails.php' method='POST' class='filmDetails'>
                 <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[profile_path]'>
                 <p class='nameSearchClass'>$row[name]</p>
                 <input type='text' value='$row[id]' name = 'filmId' id='filmId' hidden='true'>
                 </form>
               </div>
               ";
+                }
+            } else {
+                echo "0 results";
+            }
         }
-      } else {
-        echo "0 results";
-      }
-    }
 
-    mysqli_close($conn);
-    exit;
-  }
-  ?>
-  <div id="menu">
-    <div id="buttonToMain"></div>
-    <div id="searchDiv">
-      <form action="formSearchSubmited.php" method="POST" id="searchForm">
-        <div id="searchButtons">
-          <button type="button" class="buttonsChangeSearch">MOVIES</button>
-          <button type="button" class="buttonsChangeSearch">SERIES</button>
-          <button type="button" class="buttonsChangeSearch">PEOPLE</button>
+        mysqli_close($conn);
+        exit;
+    }
+    ?>
+    <div id="menu">
+        <div id="buttonToMain"></div>
+        <div id="searchDiv">
+            <form action="formSearchSubmited.php" method="POST" id="searchForm">
+                <div id="searchButtons">
+                    <button type="button" class="buttonsChangeSearch">MOVIES</button>
+                    <button type="button" class="buttonsChangeSearch">SERIES</button>
+                    <button type="button" class="buttonsChangeSearch">PEOPLE</button>
+                </div>
+                <input type="text" name="search" id="search" placeholder="SEARCH">
+                <input type="submit" value="CLICK" id="searchSubmit">
+            </form>
         </div>
-        <input type="text" name="search" id="search" placeholder="SEARCH">
-        <input type="submit" value="CLICK" id="searchSubmit">
-      </form>
+        <div id="account">
+            <?php
+
+            echo "<button id='buttonAccount' type='submit' onclick=buttonClickList()>$_SESSION[user]</button>";
+
+            ?>
+        </div>
     </div>
-    <div id="account">
-      <?php
+    <div id="middle">
+        <div id="Links"></div>
+        <div id='phpSearchDiv'>
 
-      echo "<button id='buttonAccount' type='submit' onclick=buttonClickList()>$_SESSION[user]</button>";
-
-      ?>
+        </div>
+        <div id="main">
+        </div>
     </div>
-  </div>
-  <div id="middle">
-    <div id="Links"></div>
-    <div id='phpSearchDiv'>
 
-    </div>
-    <div id="main">
-    </div>
-  </div>
-
-  <script>
-  const button = document.getElementById("buttonAccount")
+    <script>
+        const button = document.getElementById("buttonAccount")
 
 
-  function buttonClickList() {
-    const select = document.createElement("select")
-    select.setAttribute("id", "selectInAccount")
-    button.appendChild(select)
+        function buttonClickList() {
+            const logout = document.createElement("button")
+            logout.setAttribute("class", "accountButtons")
+            logout.innerHTML = "logout"
+            button.appendChild(logout)
 
-    const option1 = document.createElement("option")
-    option1.setAttribute("value", "LOG OUT")
-    option1.innerHTML = "LOG OUT"
-    select.appendChild(option1)
+            const watchlist = document.createElement("button")
+            watchlist.setAttribute("class", "accountButtons")
+            watchlist.innerHTML = "watchlist"
+            button.appendChild(watchlist)
+        }
+    </script>
 
-    const option2 = document.createElement("option")
-    option2.setAttribute("value", "WATCHLIST")
-    option2.innerHTML = "WATCHLIST"
+    <script>
+        const buttons = document.getElementsByClassName("buttonsChangeSearch")
+        var myFunction = function myFunction(i) {
+            document.cookie = "chosenButton=movie"
 
-    select.appendChild(option2)
+            if (i == 0) {
+                document.cookie = "chosenButton=movie"
+            } else if (i == 1) {
+                document.cookie = "chosenButton=series"
+            } else if (i == 2) {
+                document.cookie = "chosenButton=people"
+            } else {
+                document.cookie = "chosenButton=movie"
+            }
+        }
 
-    button.onclick = ""
-  }
-  </script>
-
-  <script>
-  const buttons = document.getElementsByClassName("buttonsChangeSearch")
-  var myFunction = function myFunction(i) {
-    document.cookie = "chosenButton=movie"
-
-    if (i == 0) {
-      document.cookie = "chosenButton=movie"
-    } else if (i == 1) {
-      document.cookie = "chosenButton=series"
-    } else if (i == 2) {
-      document.cookie = "chosenButton=people"
-    } else {
-      document.cookie = "chosenButton=movie"
-    }
-  }
-
-  for (i = 0; i < 3; i++) {
-    buttons[i].addEventListener('click', myFunction.bind(this, i), false)
-  }
-  </script>
+        for (i = 0; i < 3; i++) {
+            buttons[i].addEventListener('click', myFunction.bind(this, i), false)
+        }
+    </script>
 
 
-  <script>
-  const phpSearchDiv = document.getElementById('phpSearchDiv');
-  const divSearchClass = document.getElementsByClassName('divSearchClass');
-  var i
+    <script>
+        const phpSearchDiv = document.getElementById('phpSearchDiv');
+        const divSearchClass = document.getElementsByClassName('divSearchClass');
+        var i
 
-  var myFunction = function myFunction(i) {
-    clearInterval(Interval)
-    const input = divSearchClass[i].querySelector('input[type="text"]');
-    const form = divSearchClass[i].querySelector('form')
-    input.setAttribute("value", input.value)
-    form.submit()
-  };
-  var Interval = setInterval(function test() {
-    for (i = 0; i < 20; i++) {
+        var myFunction = function myFunction(i) {
+            clearInterval(Interval)
+            const input = divSearchClass[i].querySelector('input[type="text"]');
+            const form = divSearchClass[i].querySelector('form')
+            input.setAttribute("value", input.value)
+            form.submit()
+        };
+        var Interval = setInterval(function test() {
+            for (i = 0; i < 20; i++) {
 
-      if (document.body.contains(divSearchClass[0])) {
-        divSearchClass[i].addEventListener('click', myFunction.bind(this, i), false)
-      }
-    }
-  }, 1000)
-  </script>
+                if (document.body.contains(divSearchClass[0])) {
+                    divSearchClass[i].addEventListener('click', myFunction.bind(this, i), false)
+                }
+            }
+        }, 1000)
+    </script>
 
 
 
-  <script>
-  var search = document.getElementById("search");
-  search.addEventListener("input", function(event) {
-    // Get the value of the search input
-    var inputValue = search.value;
+    <script>
+        var search = document.getElementById("search");
+        search.addEventListener("input", function (event) {
+            // Get the value of the search input
+            var inputValue = search.value;
 
-    // Send the value to the same page using AJAX
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "main.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        // Response from the PHP script
-        // You can handle the response here as needed
-        document.getElementById("phpSearchDiv").innerHTML = xhr.responseText;
-      }
-    };
-    xhr.send("search=" + inputValue);
-    var phpSearchDiv = document.getElementById('phpSearchDiv');
+            // Send the value to the same page using AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "main.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Response from the PHP script
+                    // You can handle the response here as needed
+                    document.getElementById("phpSearchDiv").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send("search=" + inputValue);
+            var phpSearchDiv = document.getElementById('phpSearchDiv');
 
 
-    phpSearchDiv.style.height = '100%';
-    phpSearchDiv.style.width = '85vh';
-    phpSearchDiv.setAttribute("class", "changed")
-  });
-  </script>
+            phpSearchDiv.style.height = '100%';
+            phpSearchDiv.style.width = '85vh';
+            phpSearchDiv.setAttribute("class", "changed")
+        });
+    </script>
 
 </body>
 

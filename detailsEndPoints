@@ -1,0 +1,137 @@
+movies:
+  Details:
+    - adult
+    - budget
+    genres:
+      - name
+    - oryginal langauge
+    - overviev 
+    - poster_path
+    production_companies:
+      -
+    - relase_date
+    - revenue 
+    - runtime 
+    - status
+    - tagline
+    - title
+    - vote_average
+    - vote_count
+  Credits:
+    Cast:
+      - name 
+      - profile_path
+      - character
+      - known_for_department
+  External IDs:
+    - imdb_id
+    - wikidata_id
+    - facebook_id
+    - instagram_id
+    - twitter_id
+  Images:
+    - file_path
+  Reccomendations:
+    - poster_path
+    - title
+  Revievs:
+    - author
+    author_details:
+      - avatar_path
+      - rating 
+    - content
+    - created_at
+  Videos:
+    - key
+  Watch Providers:
+    - logo_path
+    - provider_name
+    
+
+series:
+  Details:
+    - first_air_date
+    genres:
+      - name 
+    - last_air_date
+    - name
+    - number_of_episodes
+    - number_of_seasons
+    - overview
+    - poster_path
+    production_companies:
+      - logo_path
+      - name
+    seasons:
+      - air_date
+      - episode_count
+      - Specials
+      - overview
+      - poster_path
+      - season_number
+      - vote_average
+    - status
+    - vote_average
+    - vote_count
+  Aggregate Credits:
+    - gender
+    - known_for_department
+    - name
+    - profile_path
+    roles:
+      - character
+  External IDs:
+    - imdb_id
+    - wikidata_id
+    - facebook_id
+    - instagram_id
+    - twitter_id
+  Images:
+    - file_path
+  Reccomendations:
+    - poster_path
+    - name
+  Revievs:
+    - author
+    author_details:
+      - avatar_path
+      - rating 
+    - content
+    - created_at
+  Videos:
+    - key
+  Watch Providers:
+    - logo_path
+    - provider_name
+
+
+people:
+  Details:
+    also_known_as:
+      - 10 
+    - biography
+    - birthday
+    - deathday
+    - gender
+    - known_for_department
+    - name
+    - place_of_birth
+    - profile_path
+  Combined Credits:
+    - title
+    - poster_path
+    - release_date
+    - character
+    - media_type
+  External IDs:
+    - imdb_id
+    - wikidata_id 
+    - facebook_id
+    - instagram_id
+    - tiktok_id
+    - twitter_id
+    - youtube_id
+  Images:
+    - file_path
+  Tagged Images:
+    - file_path
