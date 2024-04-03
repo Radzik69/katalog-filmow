@@ -6,14 +6,14 @@ session_start();
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 
 <body>
 
-    <?php
+  <?php
     if (!$_SESSION["zalogowano"] == true) {
         header('Location: ./index.php');
         exit;
@@ -42,24 +42,23 @@ session_start();
         curl_close($curlDetails);
 
 
-        $curlCredits = curl_init();
+    $curlCredits = curl_init();
 
-        curl_setopt_array($curlCredits, [
-            CURLOPT_URL => "https://api.themoviedb.org/3/movie/$movieID/credits?language=en-US",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
-                "accept: application/json"
-            ],
-        ]);
+    curl_setopt_array($curlCredits, [
+        CURLOPT_URL => "https://api.themoviedb.org/3/movie/$movieID/credits?language=en-US",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk", 
+            "Accept: application/json"
+        ],
+    ]);
 
         $responseCredits = curl_exec($curlCredits);
-        $errCredits = curl_error($curlCredits);
+        $errCredits= curl_error($curlCredits);
 
         curl_close($curlCredits);
 
@@ -87,10 +86,33 @@ session_start();
 
 
 
+        $curlReccomendations = curl_init();
+
+    curl_setopt_array($curlReccomendations, [
+        CURLOPT_URL => "https://api.themoviedb.org/3/movie/$movieID/recommendations?language=en-US&page=1",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk", 
+            "Accept: application/json"
+        ],
+    ]);
+
+        $responseReccomendations = curl_exec($curlReccomendations);
+        $errReccomendations= curl_error($curlReccomendations);
+
+        curl_close($curlReccomendations);
+
+
+        
+
         $curlImages = curl_init();
 
         curl_setopt_array($curlImages, [
-            CURLOPT_URL => "https://api.themoviedb.org/3/movie/$movieID/external_ids",
+            CURLOPT_URL => "https://api.themoviedb.org/3/movie/$movieID/images",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -109,12 +131,102 @@ session_start();
         curl_close($curlImages);
 
 
+
+        $curlReviews = curl_init();
+
+        curl_setopt_array($curlReviews, [
+          CURLOPT_URL => "https://api.themoviedb.org/3/movie/$movieID/reviews?language=en-US&page=1",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "GET",
+          CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
+            "accept: application/json"
+          ],
+        ]);
+        
+        $responseReviews = curl_exec($curlReviews);
+        $errReviews = curl_error($curlReviews);
+        
+        curl_close($curlReviews);
+        
+
+        
+        if ($errReviews) {
+          echo "cURL Error #:" . $err;
+        } else {
+            $dataReviews = json_decode($responseReviews, true); 
+            $results = $dataReviews['results'];
+        
+
+            foreach ($results as $resultsFor) {
+                $author = $resultsFor['author'];
+                $author_details = $resultsFor['author_details'];
+                $content = $resultsFor['content'];
+                $created_at = $resultsFor['created_at'];
+                $avatar_path = $resultsFor['avatar_path'];
+                $rating = $resultsFor['rating'];
+
+                echo $author;
+                echo $avatar_path;
+                echo $rating;
+                echo $content;
+                echo $created_at;
+            }
+
+        }
+
+
+        if ($errReccomendations) {
+            echo "cURL Error #:" . $errReccomendations;
+        } else {
+            $dataReccomendations = json_decode($responseReccomendations, true);
+
+            $results = $dataReccomendations['results'];
+
+            foreach ($results as $resultsFor) {
+                echo "poster_path:  {$resultsFor['poster_path']}<br>";
+                echo "title:  {$resultsFor['title']}<br>";
+            }
+            
+        }
+
+
+
+        
         if ($errImages) {
             echo "cURL Error #:" . $errImages;
         } else {
             $dataImages = json_decode($responseImages, true);
+            $backdrops = $dataImages['backdrops'];
+            $logos = $dataImages['logos'];
+            foreach ($backdrops as $backdropsFor) {
+                echo "file_path:  {$backdropsFor['file_path']}<br>";
+            }
+            foreach ($logos as $logosFor) {
+                echo "file_path:  {$logosFor['file_path']}<br>";
+            }
+            foreach ($backdrops as $backdropsFor) {
+                echo "file_path:  {$backdropsFor['file_path']}<br>";
+            }
+        }
+        
 
-            $file_path = $dataExternalsIDs['twitter_id'];
+
+
+        if ($errExternalsIDs) {
+            echo "cURL Error #:" . $errExternalsIDs;
+        } else {
+            $dataExternalsIDs = json_decode($responseExternalsIDs, true);
+
+            $imdb_id = $dataExternalsIDs['imdb_id'];
+            $facebook_id = $dataExternalsIDs['facebook_id'];
+            $wikidata_id = $dataExternalsIDs['wikidata_id'];
+            $instagram_id = $dataExternalsIDs['instagram_id'];
+            $twitter_id = $dataExternalsIDs['twitter_id'];
 
             echo "imdb: $imdb_id<br>";
             echo "facebook: $facebook_id<br>";
@@ -188,7 +300,20 @@ session_start();
         echo "chuj";
     }
     ?>
+  <script>
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk'
+    }
+  };
 
+  fetch('https://api.themoviedb.org/3/movie/2137/images', options)
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(err => console.error(err));
+  </script>
 
 </body>
 
