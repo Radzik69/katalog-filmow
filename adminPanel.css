@@ -1,0 +1,125 @@
+body{
+  margin: 0;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas: "users,revievs";
+  background-color: dimgray;
+}
+
+#users{
+  grid-area: "users";
+  border-right: 3px solid black;
+
+}
+
+#users h1{
+  text-align: center;
+}
+
+.adminPanelUsers{
+  border: 5px solid black;
+  margin-bottom: 50px;
+  margin-left: 50px;
+  width: 450px;
+  display: grid;
+  grid-template-columns: 55% 45%;
+  grid-template-areas: "infoUsers,interactButtons";
+}
+
+#infoUsers{
+  grid-area: "infoUsers";
+}
+
+#interactButtons{
+  grid-area: "interactButtons";
+  display: flex;
+  align-items: center;
+  
+}
+
+.adminPanelUsers *{
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+#revievs{
+  grid-area: "revievs";
+  border-left: 3px solid black;
+}
+
+#revievs h1{
+  text-align: center;
+}
+
+.revievDiv{
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-template-rows: 20vh;
+  grid-template-areas: "revievDivLeft,revievDivRight";
+  width: 400px;
+  border: 5px solid black;
+  margin-right: 25px;
+  margin-left: 25px;
+  margin: 25px;
+}
+
+.revievDivLeft{
+  grid-area: "revievDivLeft";
+  border-right: 2px solid black;
+}
+
+.revievDivRight{
+  grid-area: "revievDivRight";
+}
+
+.imagesReviev{
+  height: 30px;
+  width: 30px;
+}
+
+#writeReview {
+  text-align: center;
+  height: 500px;
+}
+
+.rating-container {
+  display: flex; /* Use flexbox layout */
+  align-items: center; /* Vertically center the items */
+  justify-content: center; /* Horizontally center the items */
+}
+
+.rating-container p {
+  margin-right: 10px; /* Add some space between the paragraph and select element */
+  font-size: 40px;
+}
+
+.rating-container select {
+  height: 80px;
+}
+
+
+#writeReview input:nth-child(2){
+  width: 600px;
+  height: 60px;
+}
+
+#writeReview input:nth-child(4){
+  width: 600px;
+  height: 200px;
+}
+
+#writeReview input:nth-child(7){
+  width: 150px;
+  height: 100px;
+  font-size: 30px;
+}
+
+
+#delete{
+  width: 150px;
+  height: 50px;
+}
+
+#deleteReviev{
+  width: 334%;
+}

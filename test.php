@@ -1,28 +1,35 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
 
-$curl = curl_init();
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
 
-curl_setopt_array($curl, [
-  CURLOPT_URL => "https://api.themoviedb.org/3/person/popular?language=en-US",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "GET",
-  CURLOPT_HTTPHEADER => [
-    "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
-    "accept: application/json"
-  ],
-]);
+<body>
+  <form class='prodproductbtndiv' action='test.php' method='post'>
+    <input name='addprod' type='hidden' value='".$h["id"]."'>
+    <input name='Kilosc' min='1' max='".$h["ilosc"]."' value='1' type='number' class='prodproductipt'>
+    <button type='submit' class='prodproductbtn'>Dodaj do koszyka</button>
+  </form>
 
-$response = curl_exec($curl);
-$err = curl_error($curl);
+  <?php
+  $userID = $_SESSION["id"];
+  $productID = $_POST['addprod'];
+  $Kilosc = $_POST['Kilosc'];
 
-curl_close($curl);
+  echo $userID.", ".$productID.", ".$Kilosc;
 
-if ($err) {
-  echo "cURL Error #:" . $err;
-} else {
-  echo $response;
-}
+  $sql = "INSERT INTO koszyki(userID, productID, Kilosc)
+  VALUES ('$userID','$productID','$Kilosc')";
+
+  if(mysqli_query($conn, $sql)) {
+  echo "Produkt został dodany do koszyka.";
+  } else {
+  echo "Wystąpił błąd: " . mysqli_error($conn);
+  }
+  ?>
+</body>
+
+</html>

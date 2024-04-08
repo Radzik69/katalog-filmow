@@ -1,0 +1,47 @@
+body{
+  margin: 0;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas: "movies,series";
+  background-color: dimgray;
+}
+
+#movies{
+  grid-area: "movies";
+  border: 3px solid black;
+}
+
+#series{
+  grid-area: "series";
+  border: 3px solid black;
+}
+
+.moviesElement{
+  width:350px;
+  height: 200px;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  grid-template-areas: "posterDiv,moviesInfo";
+  border: 5px solid black;
+  display: flex; /* Use flexbox layout */
+  align-items: center; /* Vertically center the items */
+  justify-content: center; /* Horizontally center the items */
+  margin: 20px;
+}
+
+.posterDiv{
+  grid-area: "poster";
+}
+
+.moviesInfo{
+  grid-area: "moviesInfo";
+  margin-left: 30px;
+}
+
+.poster{
+  height: 150px;
+}
+
+.starImage{
+  height: 30px;
+}

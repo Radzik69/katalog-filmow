@@ -28,6 +28,10 @@ session_start();
 
 <?php
 
+if (isset ($_POST["logoutSession"])) {
+  $_SESSION["zalogowany"] = false;
+}
+
 if (isset ($_SESSION["zalogowany"])) {
 
     if ($_SESSION["zalogowany"] == true) {

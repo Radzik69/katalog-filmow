@@ -34,18 +34,8 @@ movies:
   Reccomendations:
     - poster_path
     - title
-  Revievs:
-    - author
-    author_details:
-      - avatar_path
-      - rating 
-    - content
-    - created_at
   Videos:
     - key
-  Watch Providers:
-    - logo_path
-    - provider_name
     
 
 series:
@@ -107,8 +97,6 @@ series:
 
 people:
   Details:
-    also_known_as:
-      - 10 
     - biography
     - birthday
     - deathday
