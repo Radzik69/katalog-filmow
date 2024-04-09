@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 27 Mar 2024, 17:20
+-- Czas generowania: 09 Kwi 2024, 13:27
 -- Wersja serwera: 10.4.27-MariaDB
 -- Wersja PHP: 8.2.0
 
@@ -6808,6 +6808,36 @@ INSERT INTO `people` (`id`, `name`, `popularity`, `profile_path`) VALUES
 (965770, 'Carlson Young', 31.31, ''),
 (114876, 'Patrick Labyorteaux', 31.307, ''),
 (14902, 'Nicholas Campbell', 31.303, '');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `revievs`
+--
+
+CREATE TABLE `revievs` (
+  `id` int(11) NOT NULL,
+  `username` text NOT NULL,
+  `rating` int(11) NOT NULL,
+  `topic` text NOT NULL,
+  `content` text NOT NULL,
+  `likes` int(11) NOT NULL,
+  `dislikes` int(11) NOT NULL,
+  `movieID` int(11) NOT NULL,
+  `seriesID` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Zrzut danych tabeli `revievs`
+--
+
+INSERT INTO `revievs` (`id`, `username`, `rating`, `topic`, `content`, `likes`, `dislikes`, `movieID`, `seriesID`) VALUES
+(1, 'admin', 7, 'dune reviev', 'good', 0, 0, 438631, 'NULL'),
+(2, 'admin', 10, 'interstelar reviev', 'very good thought provoking', 0, 0, 157336, 'NULL'),
+(3, 'admin', 6, 'oppenhaimer', 'oppenheimer', 0, 0, 346698, 'NULL'),
+(4, 'admin', 8, 'barbie', 'barbie', 0, 0, 872585, 'NULL'),
+(8, 'radek', 8, 'star wars redek', 'super filmor jak bylem stary to go zrobili', 0, 0, 11, 'NULL'),
+(9, 'admin', 7, 'recenzja', 'cum', 0, 0, 157336, 'NULL');
 
 -- --------------------------------------------------------
 
@@ -14444,13 +14474,43 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `password`, `rights`) VALUES
-(1, 'test1', '123', 'user'),
-(2, 'test2', '123', 'user'),
-(3, 'oski boski', '123', 'user');
+(5, 'admin', 'admin', 'admin'),
+(6, 'user', 'user', 'user'),
+(10, 'women', 'balls123', 'none');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `watchlist`
+--
+
+CREATE TABLE `watchlist` (
+  `userID` text NOT NULL,
+  `movieID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Zrzut danych tabeli `watchlist`
+--
+
+INSERT INTO `watchlist` (`userID`, `movieID`) VALUES
+('user', 438631),
+('user', 438631),
+('user', 438631),
+('user', 359410),
+('admin', 609681),
+('radek', 13475),
+('admin', 157336);
 
 --
 -- Indeksy dla zrzutów tabel
 --
+
+--
+-- Indeksy dla tabeli `revievs`
+--
+ALTER TABLE `revievs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `users`
@@ -14463,10 +14523,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT dla tabeli `revievs`
+--
+ALTER TABLE `revievs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
