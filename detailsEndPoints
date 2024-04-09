@@ -81,18 +81,9 @@ series:
   Reccomendations:
     - poster_path
     - name
-  Revievs:
-    - author
-    author_details:
-      - avatar_path
-      - rating 
-    - content
-    - created_at
   Videos:
     - key
-  Watch Providers:
-    - logo_path
-    - provider_name
+
 
 
 people:
