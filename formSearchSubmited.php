@@ -16,39 +16,40 @@ session_start();
   <div id="menu">
     <button onclick='menuTp()' style="width: 20%; height:95px">MENU</button>
     <script>
-    function menuTp() {
-      window.location.href = "/katalog-filmow/main.php";
-    }
+      function menuTp() {
+        window.location.href = "/katalog-filmow/main.php";
+      }
     </script>
     FILTROWANIE
   </div>
 
   <?php
-// db
+  // db
+  
 
-
-if (isset($_POST['search'])) {
-  $searchVal = $_POST["search"];
+  if (isset($_POST['search'])) {
+    $searchVal = $_POST["search"];
 
     $server = "localhost";
     $dbuser = "root";
     $dbpassword = "";
     $dbname = "katalog-filmow";
 
-      
+
     $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
-    $sqlMovies = "SELECT id FROM movies WHERE movieName LIKE '$searchVal%' GROUP BY POPULARITY DESC LIMIT 5";
-    $sqlSeries = "SELECT id FROM series WHERE seriesTitle LIKE '$searchVal%' GROUP BY POPULARITY DESC LIMIT 5";
-    $sqlPeople = "SELECT id FROM people WHERE name LIKE '$searchVal%' GROUP BY POPULARITY DESC LIMIT 5";
-    
+    $sqlMovies = "SELECT id FROM movies WHERE movieName LIKE '$searchVal%' GROUP BY POPULARITY DESC LIMIT 50";
+    $sqlSeries = "SELECT id FROM series WHERE seriesTitle LIKE '$searchVal%' GROUP BY POPULARITY DESC LIMIT 50";
+    $sqlPeople = "SELECT id FROM people WHERE name LIKE '$searchVal%' GROUP BY POPULARITY DESC LIMIT 50";
+
     $queryMovies = mysqli_query($conn, $sqlMovies);
     $querySeries = mysqli_query($conn, $sqlSeries);
     $queryPeople = mysqli_query($conn, $sqlPeople);
 
-    function get_movies($query) {
+    function get_movies($query)
+    {
       $arr = [];
-      if(mysqli_num_rows($query)>0){
-        while($row = mysqli_fetch_assoc($query)) {
+      if (mysqli_num_rows($query) > 0) {
+        while ($row = mysqli_fetch_assoc($query)) {
           $id = $row["id"];
 
           $curlDetails = curl_init();
@@ -61,14 +62,14 @@ if (isset($_POST['search'])) {
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
-                "accept: application/json"
+              "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
+              "accept: application/json"
             ],
           ]);
           $responseDetails = curl_exec($curlDetails);
           $err = curl_error($curlDetails);
           curl_close($curlDetails);
-      
+
           if ($err) {
             echo "cURL Error #:" . $err;
             return $arr;
@@ -80,30 +81,31 @@ if (isset($_POST['search'])) {
     }
 
 
-    function get_series($query) {
+    function get_series($query)
+    {
       $arr = [];
-      if(mysqli_num_rows($query)>0){
-        while($row = mysqli_fetch_assoc($query)) {
+      if (mysqli_num_rows($query) > 0) {
+        while ($row = mysqli_fetch_assoc($query)) {
           $id = $row["id"];
 
           $curlDetailsSeries = curl_init();
           curl_setopt_array($curlDetailsSeries, [
-              CURLOPT_URL => "https://api.themoviedb.org/3/tv/$id?language=en-US",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "GET",
-              CURLOPT_HTTPHEADER => [
-                  "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
-                  "accept: application/json"
-              ],
+            CURLOPT_URL => "https://api.themoviedb.org/3/tv/$id?language=en-US",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => [
+              "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
+              "accept: application/json"
+            ],
           ]);
           $responseDetailsSeries = curl_exec($curlDetailsSeries);
           $err = curl_error($curlDetailsSeries);
           curl_close($curlDetailsSeries);
-      
+
           if ($err) {
             echo "cURL Error #:" . $err;
             return $arr;
@@ -114,14 +116,15 @@ if (isset($_POST['search'])) {
       return $arr;
     }
 
-    function get_people($query) {
+    function get_people($query)
+    {
       $arr = [];
-      if(mysqli_num_rows($query)>0){
-        while($row = mysqli_fetch_assoc($query)) {
+      if (mysqli_num_rows($query) > 0) {
+        while ($row = mysqli_fetch_assoc($query)) {
           $id = $row["id"];
-          
+
           $curlDetailsPeople = curl_init();
-      
+
           curl_setopt_array($curlDetailsPeople, [
             CURLOPT_URL => "https://api.themoviedb.org/3/person/$id?language=en-US",
             CURLOPT_RETURNTRANSFER => true,
@@ -135,12 +138,12 @@ if (isset($_POST['search'])) {
               "accept: application/json"
             ],
           ]);
-      
+
           $responseDetailsPeople = curl_exec($curlDetailsPeople);
           $err = curl_error($curlDetailsPeople);
-      
+
           curl_close($curlDetailsPeople);
-      
+
           if ($err) {
             echo "cURL Error #:" . $err;
             return $arr;
@@ -151,18 +154,19 @@ if (isset($_POST['search'])) {
       return $arr;
     }
 
-    $detailsMoviesArray =get_movies($queryMovies);
-    $detailsSeriesArray =get_series($querySeries);
-    $detailsPeopleArray =get_people($queryPeople);
+    $detailsMoviesArray = get_movies($queryMovies);
+    $detailsSeriesArray = get_series($querySeries);
+    $detailsPeopleArray = get_people($queryPeople);
 
-    function get_movie_item($arr, $i){
+    function get_movie_item($arr, $i)
+    {
       $dataDetails = $arr[$i];
       $poster_path = $dataDetails['poster_path'];
       $release_date = $dataDetails['release_date'];
       $title = $dataDetails['title'];
       $vote_average = $dataDetails['vote_average'];
       $vote_count = $dataDetails['vote_count'];
-  
+
       return "  
         <div class='moviesElement'>
           <div class='posterDiv'>
@@ -175,9 +179,11 @@ if (isset($_POST['search'])) {
           </div>
         </div>
       ";
-    };
+    }
+    ;
 
-    function get_series_item($arr, $i){
+    function get_series_item($arr, $i)
+    {
       $dataDetailsSeries = $arr[$i];
       $name = $dataDetailsSeries['name'];
       $number_of_seasons = $dataDetailsSeries['number_of_seasons'];
@@ -201,9 +207,11 @@ if (isset($_POST['search'])) {
           </div>
         </div>
       ";
-    };
+    }
+    ;
 
-    function get_people_item($arr, $i){
+    function get_people_item($arr, $i)
+    {
       $dataDetailsPeople = $arr[$i];
       $birthday = $dataDetailsPeople['birthday'];
       $deathday = $dataDetailsPeople['deathday'];
@@ -226,29 +234,31 @@ if (isset($_POST['search'])) {
           </div>
         </div>
      ";
-    };
+    }
+    ;
 
-    for ($i=0; $i <5 ; $i++) { 
-          echo '
+    for ($i = 0; $i < 50; $i++) {
+      echo '
           <div id="list">
             <div id="moviesDiv">
-              ';   
-              echo get_movie_item($detailsMoviesArray, $i);
-              echo '</div>';
-            echo '
+              ';
+      echo get_movie_item($detailsMoviesArray, $i);
+      echo '</div>';
+      echo '
             <div id="seriesDiv">
               ';
-              echo get_series_item($detailsSeriesArray, $i);
-            echo ' </div>
+      echo get_series_item($detailsSeriesArray, $i);
+      echo ' </div>
             <div id="peopleDiv">';
-              echo get_people_item($detailsPeopleArray, $i);
-            echo '</div>
+      echo get_people_item($detailsPeopleArray, $i);
+      echo '</div>
           </div>';
-        
-    };
+
+    }
+    ;
 
 
-// for ($iSeries=0; $iSeries < count($detailsSeriesArray) ; $iSeries++) { 
+    // for ($iSeries=0; $iSeries < count($detailsSeriesArray) ; $iSeries++) { 
 //   for ($iMovie=0; $iMovie < count($detailsMoviesArray) ; $iMovie++) { 
 //     for ($iPeople=0; $iPeople < count($detailsPeopleArray) ; $iPeople++) { 
 //       echo '
@@ -269,17 +279,17 @@ if (isset($_POST['search'])) {
 //     };
 //   };
 // };
-
+  
     // if (mysqli_num_rows($queryMovies) > 0) {
-
+  
     // }
+  
+  } else {
+    die('xds');
+  }
 
-}else{
-  die('xds');
-}
 
-
-?>
+  ?>
 
 
 

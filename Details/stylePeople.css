@@ -1,76 +1,128 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  #top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  #left, #right {
-    width: 48%;
-  }
-  
-  #poster {
-    margin-bottom: 20px;
-  }
-  
-  #infoBDday {
-    margin-bottom: 20px;
-  }
-  
-  #images {
-    margin-bottom: 20px;
-  }
-  
-  #credits {
-    margin-bottom: 20px;
-  }
-  
-  .credits-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .creditsClass {
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  
-  .image-container {
-    width: 150px;
-  }
-  
-  .text-container {
-    padding: 10px;
-  }
-  
-  .imagesClass {
-    width: 200px;
-    margin-right: 20px;
-  }
-  
-  .creditsImagesClass {
-    width: 150px;
-    margin-right: 20px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+body{
+  margin: 0;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: "top,images,credits";
+  background-color: dimgray;
+}
+
+#top{
+  grid-area: "top";
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-template-areas: "left,right";
+  height: 850px;
+  border: 5px solid black;
+  font-size: 20px;
+}
+
+#left{
+  grid-area: "left";
+  display: grid; 
+  grid-template-columns: 100%;
+  grid-template-rows: 85% 30%;
+}
+
+#right{
+  grid-area: "right";
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 25% 50% 25%;
+  grid-template-areas: "topRight,biography,bottom";
+}
+
+#topRight{
+  grid-area: "topRight";
+  display: flex;
+}
+
+#topRight p{
+  margin-left: 100px;
+  margin-right: 300px;
+}
+
+#topRight button{
+  height: 70px;
+  width: 150px;
+}
+
+#biography{
+  grid-area: "topRight";
+  margin-left: 50px;
+}
+
+#bottom{
+  grid-area: "bottom";
+  display: grid;
+  grid-template-columns: 35% 65%;
+  grid-template-areas: "leftBottom,socials"
+}
+
+#leftBottom{
+grid-area: "leftBottom";
+}
+
+#socials{
+  grid-area: "socials";
+}
+
+#images{
+  grid-area: "images";
+  display: flex;
+  flex-wrap: wrap;
+  border: 5px solid black;
+  align-items: center;
+  justify-content: center;
+  border: 5px solid black;
+
+}
+
+#credits{
+  grid-area: "credits";
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Adjust as needed */
+  border: 5px solid black;
+}
+
+.imgPoster{
+  width: 450px;
+}
+
+.imageClass {
+  width: 350px;
+  height: auto;
+  display: block;
+  margin: 50px;
+}
+
+#load-more-button {
+  margin-top: 10px;
+  height: 150px;
+  width: 500px;
+  margin-bottom: 20px;
+}
+
+.creditsClass {
+  width: 300px; /* Adjust as needed to leave space for margins */
+  margin: 50px; /* Adjust margin between items */
+  display: flex;
+  flex-direction: column;
+  border: 3px solid black; /* For demonstration */
+  padding: 30px; /* For demonstration */
+}
+
+.image-container {
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container img {
+  width: 100%;
+  object-fit: cover; /* Maintain aspect ratio */
+}
+
+.text-container {
+  width: 100%;
+  text-align: center;
+}

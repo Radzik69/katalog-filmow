@@ -213,7 +213,7 @@ session_start();
           $media_typeCrew[$b] = $crewFor['media_type'];
           $job[$b] = $crewFor['job'];
           $department[$b] = $crewFor['department'];
-          $release_dateCrew[$a] = $crewFor['release_date'];
+          $release_dateCrew[$b] = $crewFor['release_date'];
           $b++;
           $castNumber++;
         }
@@ -247,7 +247,7 @@ session_start();
     <div id="left">
       <div id="poster">
         <?php
-        echo "<img src='https://image.tmdb.org/t/p/original/$profile_path'>";
+        echo "<img src='https://image.tmdb.org/t/p/original/$profile_path' class='imgPoster'>";
         ?>
       </div>
       <div id="infoBDday">
@@ -284,7 +284,7 @@ session_start();
       <div id="bottom">
         <div id="leftBottom">
           <?php
-            echo"
+          echo "
               <p>$known_for_department</p>
               <p>Place of birth:$place_of_birth</p>
             ";
@@ -292,13 +292,13 @@ session_start();
         </div>
         <div id="socials">
           <?php
-          echo"
+          echo "
             <p>SOCIAL MEDIA:</p>
-            <a href='https://www.imdb.com/title/<?php echo $imdb_id; ?>' target='_blank'>IMDB</a>
-            <a href='https://www.wikidata.org/wiki/<?php echo $wikidata_id; ?>' target='_blank'>wikidata</a>
-            <a href='https://www.facebook.com/<?php echo $facebook_id; ?>' target='_blank'>facebook</a>
-            <a href='https://www.instagram.com/<?php echo $instagram_id; ?>' target='_blank'>instagram</a>
-            <a href='https://twitter.com/<?php echo $twitter_id; ?>' target='_blank'>twitter</a>
+            <a href='https://www.imdb.com/title/$imdb_id' target='_blank'>IMDB</a>
+            <a href='https://www.wikidata.org/wiki/$wikidata_id' target='_blank'>wikidata</a>
+            <a href='https://www.facebook.com/$facebook_id' target='_blank'>facebook</a>
+            <a href='https://www.instagram.com/$instagram_id' target='_blank'>instagram</a>
+            <a href='https://twitter.com/$twitter_id' target='_blank'>twitter</a>
             ";
           ?>
         </div>
@@ -307,70 +307,63 @@ session_start();
   </div>
 
   <div id="images">
-    <h1>IMAGES</h1>
     <?php
     $page = 2;
     for ($i = 0; $i < $page; $i++) {
       echo "
-        <image src='https://image.tmdb.org/t/p/original/$file_pathImages[$i]' class='imagesClass'>
-        <image src='https://image.tmdb.org/t/p/original/$file_pathTaggedImages[$i]' class='imagesClass'>
-        ";
-
+        <img src='https://image.tmdb.org/t/p/original/$file_pathImages[$i]' class='imageClass'>
+        <img src='https://image.tmdb.org/t/p/original/$file_pathTaggedImages[$i]' class='imageClass'>
+      ";
     }
     ?>
-    <button onclick="imagesCookie()"></button>
-    <script>
-      var i = 0;
-
-      function imagesCookie() {
-        i = i + 2;
-        document.cookie = `imagesNextPage=${i}`;
-      }
-    </script>
-
+    <button id="load-more-button" onclick="imagesCookie()">Load More</button>
   </div>
+
+  <script>
+    var i = 0;
+
+    function imagesCookie() {
+      i = i + 2;
+      document.cookie = `imagesNextPage=${i}`;
+    }
+  </script>
 
   <div id="credits">
-    <h1>CREDITS</h1>
-    <div class="credits-container">
-      <?php
+    <?php
+    for ($i = 0; $i < $crewNumber; $i++) {
+      echo "
+      <div class='creditsClass'>
+          <div class='image-container'>
+              <img src='https://image.tmdb.org/t/p/original/$poster_pathCredits[$i]' class='creditsImagesClass'>
+          </div>
+          <div class='text-container'>
+              <h1>$titleCredits[$i]</h1>
+              <p>type: $media_typeCredits[$i]</p>
+              <p>release date:$release_dateCredits[$i]</p>
+              <p>character: $characterCredits[$i]</p>
+          </div>
+      </div>
+  ";
+    }
 
-      for ($i = 0; $i < $crewNumber; $i++) {
-        echo "
-                <div class='creditsClass'>
-                    <div class='image-container'>
-                        <img src='https://image.tmdb.org/t/p/original/$poster_pathCredits[$i]' class='creditsImagesClass'>
-                    </div>
-                    <div class='text-container'>
-                        <h1>$titleCredits[$i]</h1>
-                        <p>$media_typeCredits[$i]</p>
-                        <p>$release_dateCredits[$i]</p>
-                        <p>$characterCredits[$i]</p>
-                    </div>
-                </div>
-            ";
-      }
-
-      for ($i = 0; $i < $castNumber; $i++) {
-        echo "
-                <div class='creditsClass'>
-                    <div class='image-container'>
-                        <img src='https://image.tmdb.org/t/p/original/$poster_pathCrew[$i]' class='creatorsImagesClass'>
-                    </div>
-                    <div class='text-container'>
-                        <h1>$titleCrew[$i]</h1>
-                        <p>$media_typeCrew[$i]</p>
-                        <p>$release_dateCrew[$i]</p>
-                        <p>$department[$i]</p>
-                        <p>$job[$i]</p>
-                    </div>
-                </div>
-            ";
-      }
-      ?>
-    </div>
+    for ($i = 0; $i < $castNumber; $i++) {
+      echo "
+      <div class='creditsClass'>
+          <div class='image-container'>
+              <img src='https://image.tmdb.org/t/p/original/$poster_pathCrew[$i]' class='creatorsImagesClass'>
+          </div>
+          <div class='text-container'>
+              <h1>$titleCrew[$i]</h1>
+              <p>type: $media_typeCrew[$i]</p>
+              <p> release date: $release_dateCrew[$i]</p>
+              <p>department: $department[$i]</p>
+              <p>job: $job[$i]</p>
+          </div>
+      </div>
+  ";
+    }
+    ?>
   </div>
-
 
 
   <script>
