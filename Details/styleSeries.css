@@ -2,8 +2,7 @@ body{
 margin: 0;
 display: grid;
 grid-template-columns: 100%;
-grid-template-rows: 75vh 62vh 60vh 60vh 140vh 200vh;
-grid-template-areas: "top,infoRecc,images,videos,cast,Revievs";
+grid-template-areas: "top,reccomendations,seasons,images,videos,cast,Revievs";
 background-color: dimgray;
 }
 
@@ -12,17 +11,17 @@ grid-area: "top";
 border: 10px solid black;
 display: grid;
 grid-template-columns: 30% 70%;
-grid-template-rows: 75vh;
 grid-template-areas: "leftTop,rightTop";
 }
 
-#infoRecc{
+#reccomendations{
 grid-area: "infoRecc";
 border: 10px solid black;
-display: grid;
-grid-template-columns: 30% 70%;
-grid-template-rows: 62vh;
-grid-template-areas: "info,Reccomendations";
+}
+
+#seasons{
+    grid-area: "seasons";
+    border: 10px solid black;
 }
 
 #images{
@@ -67,14 +66,6 @@ height: 50px;
 
 .prodCompClass{
 height: 50px;
-}
-
-#info{
-grid-area: "info";
-}
-
-#Reccomendations{
-grid-area: "Reccomendations";
 }
 
 .reccomendationsImageClass{
@@ -163,40 +154,33 @@ font-size: 30px;
 }
 
 #Reccomendations {
-text-align: center; /* Center the content horizontally */
-}
-
-#Reccomendations {
-text-align: center; /* Center the content horizontally */
-}
-
-#Reccomendations {
-text-align: center; /* Center the content horizontally */
-}
-
-.reccomendationsContainer {
-display: flex; /* Use flexbox layout */
-justify-content: center; /* Center the child elements horizontally */
-flex-wrap: wrap; /* Allow items to wrap to the next line */
+    text-align: center; /* Center the content horizontally */
+    margin-bottom: 150px;
 }
 
 .reccomendationsDiv {
-width: 350px; /* Set the width of each recommendation div */
-margin: 30px; /* Add some margin around each recommendation div */
-position: relative; /* Set the position of the div to relative */
+    width: 400px; /* Set the width of each recommendation div */
+    margin-left: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    position: relative; /* Set the position of the div to relative */
+    display: inline-block; /* Display the divs inline */
+    vertical-align: top; /* Align the top of the divs */
 }
 
 .reccomendationsDiv p {
-margin-bottom: 15px; /* Add margin between paragraphs */
+    margin-bottom: 15px; /* Add margin between paragraphs */
+    font-size: 20px;
 }
 
 .reccomendationsDiv img {
-position: absolute; /* Position the image absolutely */
-top: 0; /* Align the top of the image with the top of the div */
-right: 0; /* Align the image to the right of the div */
-height: 100px; /* Set the width of the image */
-margin-left: 100px; /* Add some margin between paragraphs and image */
+    position: absolute; /* Position the image absolutely */
+    top: 0; /* Align the top of the image with the top of the div */
+    right: 0; /* Align the image to the right of the div */
+    height: 150px; /* Set the width of the image */
+    margin-left: 100px; /* Add some margin between paragraphs and image */
 }
+
 
 .creators-container {
 display: flex;
@@ -285,4 +269,58 @@ height: 200px;
 width: 150px;
 height: 100px;
 font-size: 30px;
+}
+
+/* Style for the seasons division container */
+#seasonsDivContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#seasons h1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for individual season div */
+.seasonsDiv {
+    width: 25%; /* Adjust this as needed */
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Style for the poster image */
+.posterSeasonsDiv img {
+    width: 100%;
+    height: auto;
+}
+
+/* Style for the right side content */
+.right {
+    padding: 10px;
+}
+
+/* Style for the name and season number */
+.seasonsDivNameNumber p {
+    margin: 0;
+}
+
+/* Style for the other information */
+.seasonsInfoRest p {
+    margin: 5px 0;
+}
+
+/* Style for the rating */
+.imagesSeasons {
+    height: 20px;
+    width: auto;
+    vertical-align: middle;
+}
+
+.seasonsOverview{
+    font-size: 15px;
 }

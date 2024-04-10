@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  #left, #right {
+    width: 48%;
+  }
+  
+  #poster {
+    margin-bottom: 20px;
+  }
+  
+  #infoBDday {
+    margin-bottom: 20px;
+  }
+  
+  #images {
+    margin-bottom: 20px;
+  }
+  
+  #credits {
+    margin-bottom: 20px;
+  }
+  
+  .credits-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .creditsClass {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .image-container {
+    width: 150px;
+  }
+  
+  .text-container {
+    padding: 10px;
+  }
+  
+  .imagesClass {
+    width: 200px;
+    margin-right: 20px;
+  }
+  
+  .creditsImagesClass {
+    width: 150px;
+    margin-right: 20px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  

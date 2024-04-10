@@ -9,7 +9,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styleMovies.css">
+    <link rel="stylesheet" href="styleSeries.css">
 </head>
 
 <body>
@@ -22,7 +22,6 @@ session_start();
 
     if (isset($_POST['seriesID'])) {
         $seriesID = $_POST["seriesID"];
-        echo $seriesID;
         $curlDetails = curl_init();
         curl_setopt_array($curlDetails, [
             CURLOPT_URL => "https://api.themoviedb.org/3/tv/$seriesID?language=en-US",
@@ -246,8 +245,10 @@ session_start();
             $crew = $dataCredits['crew'];
             $i = 0;
             $y = 0;
+            $castNumber = 0;
+            $crewNumber = 0;
             foreach ($cast as $castFor) {
-
+                $castNumber++;
                 $nameCast[$i] = $castFor['name'];
                 $profile_pathCast[$i] = $castFor['profile_path'];
                 $character[$i] = $castFor['character'];
@@ -256,7 +257,7 @@ session_start();
             }
 
             foreach ($crew as $crewFor) {
-
+                $crewNumber++;
                 $nameCrew[$y] = $crewFor['name'];
                 $profile_pathCrew[$y] = $crewFor['profile_path'];
                 $job[$y] = $crewFor['job'];
@@ -493,62 +494,62 @@ session_start();
         // echo "$poster_pathSeasons[0]<br>";
         // echo "$season_number[0]<br>";
         // echo "$vote_averageSeasons[0]<br>"; -->
-
-    <div id="seasons">
+    <div id="Reccomendations">
         <h1>RECOMMENDATIONS:</h1>
         <?php
-        $i = 0;
-        foreach ($seasons as $seasonsForCSS) {
-            $air_dateSeasons[$i] = $seasonsForCSS['air_date'];
-            $episode_countSeasons[$i] = $seasonsForCSS['episode_count'];
-            $nameSeasons[$i] = $seasonsForCSS['name'];
-            $overviewSeasons[$i] = $seasonsForCSS['overview'];
-            $poster_pathSeasons[$i] = $seasonsForCSS['poster_path'];
-            $season_number[$i] = $seasonsForCSS['season_number'];
-            $vote_average[$i] = $seasonsForCSS['vote_average'];
-
+        for ($i = 0; $i < 8; $i++) {
             echo "
-                <div class='seasonsDiv'>
-                    <div class='posterSeasonsDiv'>
-                        <img src='https://image.tmdb.org/t/p/original/$poster_pathSeasons[$i]' class='seasonsImageClass'>
+                    <div class='reccomendationsDiv'>
+                        <p>-$nameReccomendations[$i]</p>
+                        <p>-$first_air_dateReccomendations[$i]</p>
+                        <img src='https://image.tmdb.org/t/p/original/$poster_pathReccomendations[$i]' class='reccomendationsImageClass'>
                     </div>
-                    <div class='seasonsDivNameNumber'>
-                        <h1>$nameSeasons[$i]</h1>
-                        <p>$season_number[$i] sezon</p>
-                    </div>
-                    <div class='seasonsInfoRest'>
-                    <p>$overviewSeasons[$i]</p>
-                    <p>relase date: $air_dateSeasons[$i]</p>
-                    <p>Episode ammount: $episode_countSeasons[$i]</p>
-                    <p><image src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' class='imagesSeasons'>$vote_average/10</p>
-
-                    </div>
-                </div>
                 ";
-            $i++;
         }
-
-
         ?>
     </div>
 
 
-    <div id="Reccomendations">
-        <h1>RECOMMENDATIONS:</h1>
-        <div class="reccomendationsContainer">
+    <div id="seasons">
+        <h1>SEASONS:</h1>
+        <div id="seasonsDivContainer">
             <?php
-            for ($i = 0; $i < 6; $i++) {
+            $i = 0;
+            foreach ($seasons as $seasonsForCSS) {
+                $air_dateSeasons[$i] = $seasonsForCSS['air_date'];
+                $episode_countSeasons[$i] = $seasonsForCSS['episode_count'];
+                $nameSeasons[$i] = $seasonsForCSS['name'];
+                $overviewSeasons[$i] = $seasonsForCSS['overview'];
+                $poster_pathSeasons[$i] = $seasonsForCSS['poster_path'];
+                $vote_average = array();
+                $vote_average[$i] = $seasonsForCSS['vote_average'];
+
                 echo "
-            <div class='reccomendationsDiv'>
-                <p>-$nameReccomendations[$i]</p>
-                <p>-$first_air_dateReccomendations[$i]</p>
-                <img src='https://image.tmdb.org/t/p/original/$poster_pathReccomendations[$i]' class='reccomendationsImageClass'>
+            <div class='seasonsDiv'>
+                <div class='posterSeasonsDiv'>
+                    <img src='https://image.tmdb.org/t/p/original/$poster_pathSeasons[$i]' class='seasonsImageClass'>
+                </div>
+                <div class='right'>
+                    <div class='seasonsDivNameNumber'>
+                        <h1>$nameSeasons[$i]</h1>
+                    </div>
+                    <div class='seasonsInfoRest'>
+                        <p class='seasonsOverview'>$overviewSeasons[$i] </p><br>
+                        <p>relase date: $air_dateSeasons[$i]</p>
+                        <p>Episode ammount: $episode_countSeasons[$i]</p>
+                        <p><img src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' class='imagesSeasons'>$vote_average[$i]/10</p>
+                    </div>
+                </div>
             </div>
-        ";
+            ";
+                $i++;
             }
             ?>
         </div>
     </div>
+
+
+
 
     </div>
 
@@ -597,7 +598,7 @@ session_start();
         <h1>CREATORS</h1>
         <div class="creators-container">
             <?php
-            for ($i = 0; $i < 20; $i++) {
+            for ($i = 0; $i < $castNumber; $i++) {
                 echo "
             <div class='creatorsClass'>
                 <div class='image-container'>
@@ -612,7 +613,7 @@ session_start();
         ";
             }
             // Loop through crew
-            for ($i = 0; $i < 10; $i++) {
+            for ($i = 0; $i < $crewNumber; $i++) {
                 echo "
         <div class='creatorsClass'>
             <div class='image-container'>

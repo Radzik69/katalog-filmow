@@ -9,331 +9,383 @@ session_start();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="stylePeople.css">
 </head>
 
 <body>
 
   <?php
-    if (!$_SESSION["zalogowano"] == true) {
-        header('Location: ./index.php');
-        exit;
-    }
+  if (!$_SESSION["zalogowano"] == true) {
+    header('Location: ./index.php');
+    exit;
+  }
 
-    if (isset($_POST['peopleID'])) {
-        $peopleID = $_POST["peopleID"];
+  if (isset($_POST['peopleID'])) {
+    $peopleID = $_POST["peopleID"];
 
-            $curlDetails = curl_init();
-        curl_setopt_array($curlDetails, [
-            CURLOPT_URL => "https://api.themoviedb.org/3/person/$peopleID?language=en-US",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
-                "accept: application/json"
-            ],
-        ]);
-        $responseDetails = curl_exec($curlDetails);
-        $errDetails = curl_error($curlDetails);
-        curl_close($curlDetails);
+    $curlDetails = curl_init();
+    curl_setopt_array($curlDetails, [
+      CURLOPT_URL => "https://api.themoviedb.org/3/person/$peopleID?language=en-US",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "GET",
+      CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
+        "accept: application/json"
+      ],
+    ]);
+    $responseDetails = curl_exec($curlDetails);
+    $errDetails = curl_error($curlDetails);
+    curl_close($curlDetails);
 
 
     $curlCredits = curl_init();
 
     curl_setopt_array($curlCredits, [
-        CURLOPT_URL => "https://api.themoviedb.org/3/person/$peopleID/combined_credits?language=en-US",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_HTTPHEADER => [
-            "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk", 
-            "Accept: application/json"
-        ],
+      CURLOPT_URL => "https://api.themoviedb.org/3/person/$peopleID/combined_credits?language=en-US",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "GET",
+      CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
+        "Accept: application/json"
+      ],
     ]);
 
-        $responseCredits = curl_exec($curlCredits);
-        $errCredits= curl_error($curlCredits);
+    $responseCredits = curl_exec($curlCredits);
+    $errCredits = curl_error($curlCredits);
 
-        curl_close($curlCredits);
-
-
-    //     $curlExternalsIDs = curl_init();
-
-    //     curl_setopt_array($curlExternalsIDs, [
-    //         CURLOPT_URL => "https://api.themoviedb.org/3/tv/$seriesID/external_ids",
-    //         CURLOPT_RETURNTRANSFER => true,
-    //         CURLOPT_ENCODING => "",
-    //         CURLOPT_MAXREDIRS => 10,
-    //         CURLOPT_TIMEOUT => 30,
-    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //         CURLOPT_CUSTOMREQUEST => "GET",
-    //         CURLOPT_HTTPHEADER => [
-    //             "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
-    //             "accept: application/json"
-    //         ],
-    //     ]);
-
-    //     $responseExternalsIDs = curl_exec($curlExternalsIDs);
-    //     $errExternalsIDs = curl_error($curlExternalsIDs);
-
-    //     curl_close($curlExternalsIDs);
+    curl_close($curlCredits);
 
 
+    $curlExternalsIDs = curl_init();
 
-    //     $curlReccomendations = curl_init();
+    curl_setopt_array($curlExternalsIDs, [
+      CURLOPT_URL => "https://api.themoviedb.org/3/person/$peopleID/external_ids",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "GET",
+      CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
+        "accept: application/json"
+      ],
+    ]);
 
-    // curl_setopt_array($curlReccomendations, [
-    //     CURLOPT_URL => "https://api.themoviedb.org/3/tv/$seriesID/recommendations?language=en-US&page=1",
-    //     CURLOPT_RETURNTRANSFER => true,
-    //     CURLOPT_FOLLOWLOCATION => true,
-    //     CURLOPT_TIMEOUT => 30,
-    //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //     CURLOPT_CUSTOMREQUEST => "GET",
-    //     CURLOPT_HTTPHEADER => [
-    //         "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk", 
-    //         "Accept: application/json"
-    //     ],
-    // ]);
+    $responseExternalsIDs = curl_exec($curlExternalsIDs);
+    $errExternalsIDs = curl_error($curlExternalsIDs);
 
-    //     $responseReccomendations = curl_exec($curlReccomendations);
-    //     $errReccomendations= curl_error($curlReccomendations);
-
-    //     curl_close($curlReccomendations);
-
-
-        
-
-    //     $curlImages = curl_init();
-
-    //     curl_setopt_array($curlImages, [
-    //         CURLOPT_URL => "https://api.themoviedb.org/3/tv/$seriesID/images",
-    //         CURLOPT_RETURNTRANSFER => true,
-    //         CURLOPT_ENCODING => "",
-    //         CURLOPT_MAXREDIRS => 10,
-    //         CURLOPT_TIMEOUT => 30,
-    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //         CURLOPT_CUSTOMREQUEST => "GET",
-    //         CURLOPT_HTTPHEADER => [
-    //             "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
-    //             "accept: application/json"
-    //         ],
-    //     ]);
-
-    //     $responseImages = curl_exec($curlImages);
-    //     $errImages = curl_error($curlImages);
-
-    //     curl_close($curlImages);
-
-
-
-    //     $curlVideos = curl_init();
-
-    //         curl_setopt_array($curlVideos, [
-    //         CURLOPT_URL => "https://api.themoviedb.org/3/tv/$seriesID/videos?language=en-US",
-    //         CURLOPT_RETURNTRANSFER => true,
-    //         CURLOPT_ENCODING => "",
-    //         CURLOPT_MAXREDIRS => 10,
-    //         CURLOPT_TIMEOUT => 30,
-    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //         CURLOPT_CUSTOMREQUEST => "GET",
-    //         CURLOPT_HTTPHEADER => [
-    //             "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
-    //             "accept: application/json"
-    //         ],
-    //         ]);
-
-    //         $responseVideos = curl_exec($curlVideos);
-    //         $errVideos = curl_error($curlVideos);
-
-    //         curl_close($curlVideos);
+    curl_close($curlExternalsIDs);
 
 
 
 
-    //         if ($errVideos) {
-    //             echo "cURL Error #:" . $errVideos;
-    //         } else {
-    //             $dataVideos = json_decode($responseVideos, true);
-    
-    //             $results = $dataVideos['results'];
-    //             $i = 0;
-    //             foreach ($results as $resultsFor) {
-                    
-    //                 $key[$i] = $resultsFor['key'];
-    //                 $i++;
-    //             }
-                
-    //         }
-            
 
-    //     if ($errReccomendations) {
-    //         echo "cURL Error #:" . $errReccomendations;
-    //     } else {
-    //         $dataReccomendations = json_decode($responseReccomendations, true);
+    $curlImages = curl_init();
 
-    //         $results = $dataReccomendations['results'];
-    //         $i=0;
-    //         foreach ($results as $resultsFor) {
-    //             $poster_pathReccomendations[$i] = $resultsFor['poster_path'];
-    //             $nameReccomendations[$i] = $resultsFor['name'];
-    //             $i++;
-    //         }
-    //     }
+    curl_setopt_array($curlImages, [
+      CURLOPT_URL => "https://api.themoviedb.org/3/person/$peopleID/images",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "GET",
+      CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
+        "accept: application/json"
+      ],
+    ]);
+
+    $responseImages = curl_exec($curlImages);
+    $errImages = curl_error($curlImages);
+
+    curl_close($curlImages);
 
 
-        
+    $curlTaggedImages = curl_init();
 
+    curl_setopt_array($curlTaggedImages, [
+      CURLOPT_URL => "https://api.themoviedb.org/3/person/$peopleID/tagged_images?page=1",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "GET",
+      CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk",
+        "accept: application/json"
+      ],
+    ]);
 
+    $responseTaggedImages = curl_exec($curlTaggedImages);
+    $errTaggedImages = curl_error($curlTaggedImages);
 
-        
-    //     if ($errImages) {
-    //         echo "cURL Error #:" . $errImages;
-    //     } else {
-    //         $dataImages = json_decode($responseImages, true);
-    //         $backdrops = $dataImages['backdrops'];
-    //         $logos = $dataImages['logos'];
-    //         $posters = $dataImages['posters'];
-
-    //         $a=0;
-    //         $b=0;
-    //         $c=0;
-    //         foreach ($backdrops as $backdropsFor) {
-    //             $file_pathBackdrops[$a] = $backdropsFor['file_path'];
-    //             $a++;
-    //         }
-    //         foreach ($logos as $logosFor) {
-    //             $file_pathLogos[$b] = $backdropsFor['file_path'];
-    //             $b++;
-    //         }
-    //         foreach ($posters as $postersFor) {
-    //             $file_pathPosters[$c] = $postersFor['file_path'];
-    //             $c++;
-    //         }
-    //     }
-        
-
-
-            
-    //     if ($errExternalsIDs) {
-    //         echo "cURL Error #:" . $errExternalsIDs;
-    //     } else {
-    //         $dataExternalsIDs = json_decode($responseExternalsIDs, true);
-
-    //         $imdb_id = $dataExternalsIDs['imdb_id'];
-    //         $facebook_id = $dataExternalsIDs['facebook_id'];
-    //         $wikidata_id = $dataExternalsIDs['wikidata_id'];
-    //         $instagram_id = $dataExternalsIDs['instagram_id'];
-    //         $twitter_id = $dataExternalsIDs['twitter_id'];
-
-            
-
-            
-    //     }
+    curl_close($curlTaggedImages);
 
 
 
-        
-        if ($errCredits) {
-            echo "cURL Error #:" . $errCredits;
-        } else {
-            $dataCredits = json_decode($responseCredits, true);
-            $cast = $dataCredits['cast'];
-                $a=0;
-                $b=0;
-                foreach ($cast as $CastFor) {
-                    $titleCredits = $CastFor['title'];
-                    $poster_pathCredits = $CastFor['poster_path'];
-                    $release_dateCredits = $CastFor['release_date'];
-                    $characterCredits = $CastFor['character'];
-                    $media_typeCredits = $CastFor['media_type'];
-                  $a++;
-                
-            }
-        }
 
-
-           
-
-
-        if ($errDetails) {
-            echo "cURL Error #:" . $errDetails;
-        } else {
-            $dataDetails = json_decode($responseDetails, true);
-            $biography = $dataDetails['biography'];
-            $birthday = $dataDetails['birthday'];
-            $deathday = $dataDetails['deathday'];
-            $gender = $dataDetails['gender'];
-            $known_for_department = $dataDetails['known_for_department'];
-            $name = $dataDetails['name'];
-            $place_of_birth = $dataDetails['place_of_birth'];
-            $profile_path = $dataDetails['profile_path'];
-            
-        }
-        
-
-
-
-        
-    //         echo "$key[0]<br>";
-    //         echo "$poster_pathReccomendations[0]<br>";
-    //         echo "$nameReccomendations[0]<br>";
-    //         echo "$file_pathBackdrops[0]<br>";
-    //         echo "$file_pathLogos[0]<br>";
-    //         echo "$file_pathPosters[0]<br>";
-    //         echo "$imdb_id <br>";
-    //         echo "$facebook_id <br>";
-    //         echo "$wikidata_id <br>";
-    //         echo "$instagram_id <br>";
-    //         echo "$twitter_id <br>";
-    //         echo "$nameCast[0]<br>";
-    //         echo "$profile_pathCast[0]<br>";
-    //         echo "$character[0]<br>";
-    //         echo "$known_for_department[0]<br>";
-            echo "$biography <br>";
-            echo "$birthday <br>";
-            echo "$deathday <br>";
-            echo "$gender <br>";
-            echo "$known_for_department <br>";
-            echo "$name <br>";
-            echo "$place_of_birth <br>";
-            echo "$profile_path <br>";
-
-
+    if ($errImages) {
+      echo "cURL Error #:" . $errImages;
     } else {
-        echo "chuj";
+      $dataImages = json_decode($responseImages, true);
+      $profiles = $dataImages['profiles'];
+
+      $i = 0;
+      foreach ($profiles as $profilesFor) {
+        $file_pathImages[$i] = $profilesFor['file_path'];
+        $i++;
+      }
+    }
+
+
+
+    if ($errTaggedImages) {
+      echo "cURL Error #:" . $errTaggedImages;
+    } else {
+      $dataTaggedImages = json_decode($responseTaggedImages, true);
+      $results = $dataTaggedImages['results'];
+
+      $i = 0;
+      foreach ($results as $resultsFor) {
+        $file_pathTaggedImages[$i] = $resultsFor['file_path'];
+        $i++;
+      }
+    }
+
+
+
+
+    if ($errExternalsIDs) {
+      echo "cURL Error #:" . $errExternalsIDs;
+    } else {
+      $dataExternalsIDs = json_decode($responseExternalsIDs, true);
+
+      $imdb_id = $dataExternalsIDs['imdb_id'];
+      $facebook_id = $dataExternalsIDs['facebook_id'];
+      $wikidata_id = $dataExternalsIDs['wikidata_id'];
+      $instagram_id = $dataExternalsIDs['instagram_id'];
+      $twitter_id = $dataExternalsIDs['twitter_id'];
+      $tiktok_id = $dataExternalsIDs['tiktok_id'];
+      $youtube_id = $dataExternalsIDs['youtube_id'];
+
+    }
+
+
+
+    if ($errCredits) {
+      echo "cURL Error #:" . $errCredits;
+    } else {
+      $dataCredits = json_decode($responseCredits, true);
+      $cast = $dataCredits['cast'];
+      $crew = $dataCredits['crew'];
+
+      $a = 0;
+      $b = 0;
+      $crewNumber = 0;
+      $castNumber = 0;
+
+      foreach ($cast as $CastFor) {
+        if (isset($CastFor['title'], $CastFor['poster_path'], $CastFor['release_date'], $CastFor['character'], $CastFor['media_type'])) {
+          $titleCredits[$a] = $CastFor['title'];
+          $poster_pathCredits[$a] = $CastFor['poster_path'];
+          $release_dateCredits[$a] = $CastFor['release_date'];
+          $characterCredits[$a] = $CastFor['character'];
+          $media_typeCredits[$a] = $CastFor['media_type'];
+          $a++;
+          $crewNumber++;
+        }
+      }
+
+      foreach ($crew as $crewFor) {
+        if (isset($crewFor['title'], $crewFor['poster_path'], $crewFor['media_type'], $crewFor['job'], $crewFor['department'])) {
+          $titleCrew[$b] = $crewFor['title'];
+          $poster_pathCrew[$b] = $crewFor['poster_path'];
+          $media_typeCrew[$b] = $crewFor['media_type'];
+          $job[$b] = $crewFor['job'];
+          $department[$b] = $crewFor['department'];
+          $release_dateCrew[$a] = $crewFor['release_date'];
+          $b++;
+          $castNumber++;
+        }
+      }
+    }
+
+
+
+
+
+    if ($errDetails) {
+      echo "cURL Error #:" . $errDetails;
+    } else {
+      $dataDetails = json_decode($responseDetails, true);
+      $biography = $dataDetails['biography'];
+      $birthday = $dataDetails['birthday'];
+      $deathday = $dataDetails['deathday'];
+      $gender = $dataDetails['gender'];
+      $known_for_department = $dataDetails['known_for_department'];
+      $name = $dataDetails['name'];
+      $place_of_birth = $dataDetails['place_of_birth'];
+      $profile_path = $dataDetails['profile_path'];
+
+    }
+  } else {
+    echo "chuj";
+  }
+  ?>
+
+  <div id="top">
+    <div id="left">
+      <div id="poster">
+        <?php
+        echo "<img src='https://image.tmdb.org/t/p/original/$profile_path'>";
+        ?>
+      </div>
+      <div id="infoBDday">
+        <?php
+        echo "
+          <p>birthday: $birthday</p>
+          <p>deathday: $deathday</p>
+        ";
+        ?>
+      </div>
+    </div>
+    <div id="right">
+      <div id="topRight">
+        <?php
+        echo "
+            <h1>$name</h1>
+            <p>$gender</p>
+            <button onclick='menuTp()'>MENU</button>
+          ";
+        ?>
+        <script>
+          function menuTp() {
+            window.location.href = "/katalog-filmow/main.php";
+          }
+        </script>
+      </div>
+      <div id="biography">
+        <?php
+        echo "
+            <p>$biography</p>
+          ";
+        ?>
+      </div>
+      <div id="bottom">
+        <div id="leftBottom">
+          <?php
+            echo"
+              <p>$known_for_department</p>
+              <p>Place of birth:$place_of_birth</p>
+            ";
+          ?>
+        </div>
+        <div id="socials">
+          <?php
+          echo"
+            <p>SOCIAL MEDIA:</p>
+            <a href='https://www.imdb.com/title/<?php echo $imdb_id; ?>' target='_blank'>IMDB</a>
+            <a href='https://www.wikidata.org/wiki/<?php echo $wikidata_id; ?>' target='_blank'>wikidata</a>
+            <a href='https://www.facebook.com/<?php echo $facebook_id; ?>' target='_blank'>facebook</a>
+            <a href='https://www.instagram.com/<?php echo $instagram_id; ?>' target='_blank'>instagram</a>
+            <a href='https://twitter.com/<?php echo $twitter_id; ?>' target='_blank'>twitter</a>
+            ";
+          ?>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="images">
+    <h1>IMAGES</h1>
+    <?php
+    $page = 2;
+    for ($i = 0; $i < $page; $i++) {
+      echo "
+        <image src='https://image.tmdb.org/t/p/original/$file_pathImages[$i]' class='imagesClass'>
+        <image src='https://image.tmdb.org/t/p/original/$file_pathTaggedImages[$i]' class='imagesClass'>
+        ";
+
     }
     ?>
+    <button onclick="imagesCookie()"></button>
+    <script>
+      var i = 0;
+
+      function imagesCookie() {
+        i = i + 2;
+        document.cookie = `imagesNextPage=${i}`;
+      }
+    </script>
+
+  </div>
+
+  <div id="credits">
+    <h1>CREDITS</h1>
+    <div class="credits-container">
+      <?php
+
+      for ($i = 0; $i < $crewNumber; $i++) {
+        echo "
+                <div class='creditsClass'>
+                    <div class='image-container'>
+                        <img src='https://image.tmdb.org/t/p/original/$poster_pathCredits[$i]' class='creditsImagesClass'>
+                    </div>
+                    <div class='text-container'>
+                        <h1>$titleCredits[$i]</h1>
+                        <p>$media_typeCredits[$i]</p>
+                        <p>$release_dateCredits[$i]</p>
+                        <p>$characterCredits[$i]</p>
+                    </div>
+                </div>
+            ";
+      }
+
+      for ($i = 0; $i < $castNumber; $i++) {
+        echo "
+                <div class='creditsClass'>
+                    <div class='image-container'>
+                        <img src='https://image.tmdb.org/t/p/original/$poster_pathCrew[$i]' class='creatorsImagesClass'>
+                    </div>
+                    <div class='text-container'>
+                        <h1>$titleCrew[$i]</h1>
+                        <p>$media_typeCrew[$i]</p>
+                        <p>$release_dateCrew[$i]</p>
+                        <p>$department[$i]</p>
+                        <p>$job[$i]</p>
+                    </div>
+                </div>
+            ";
+      }
+      ?>
+    </div>
+  </div>
+
+
+
   <script>
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk'
-    }
-  };
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk'
+      }
+    };
 
-  fetch('https://api.themoviedb.org/3/person/30614/combined_credits?language=en-US', options)
-    .then(response => response.json())
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
-
-  const options1 = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk'
-    }
-  };
-
-  fetch('https://api.themoviedb.org/3/tv/123/credits?language=en-US', options1)
-    .then(response => response.json())
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
+    fetch('https://api.themoviedb.org/3/person/30614/combined_credits?language=en-US', options)
+      .then(response => response.json())
+      .then(response => console.log(response))
+      .catch(err => console.error(err));
   </script>
 
 </body>
