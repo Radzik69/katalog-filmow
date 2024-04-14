@@ -12,7 +12,7 @@ session_start();
     <link rel="stylesheet" href="styleMovies.css">
 </head>
 
-<body>
+<body id="body">
 
     <?php
     if (!$_SESSION["zalogowano"] == true) {
@@ -184,6 +184,7 @@ session_start();
                 $poster_pathReccomendations[$i] = $resultsReccomendationsFor['poster_path'];
                 $titleReccomendations[$i] = $resultsReccomendationsFor['title'];
                 $relase_dateReccomendations[$i] = $resultsReccomendationsFor['release_date'];
+                $id_Reccomendations[$i] = $resultsReccomendationsFor['id'];
                 $i++;
             }
         }
@@ -255,6 +256,7 @@ session_start();
                 $profile_pathCast[$i] = $castFor['profile_path'];
                 $character[$i] = $castFor['character'];
                 $known_for_department[$i] = $castFor['known_for_department'];
+                $id_Cast[$i] = $castFor['id'];
                 $i++;
             }
 
@@ -264,6 +266,7 @@ session_start();
                 $profile_pathCrew[$y] = $crewFor['profile_path'];
                 $job[$y] = $crewFor['job'];
                 $department[$y] = $crewFor['department'];
+                $id_Crew[$y] = $crewFor['id'];
                 $y++;
             }
         }
@@ -344,66 +347,59 @@ session_start();
     }
     ?>
 
-
     <div id="top">
-
         <div id="leftTop">
             <div id="poster">
                 <?php
-                echo "
-            <image src='https://image.tmdb.org/t/p/original/$poster_path' id='poster'>
-            ";
+                if (isset($poster_path)) {
+                    echo "<image src='https://image.tmdb.org/t/p/original/$poster_path' id='poster'>";
+                }
                 ?>
             </div>
             <div id="infoTop">
                 <?php
-                echo "
-                <p></p>
-                <p></p>
-                <p>$release_date</p>
-                <p>$status</p>
-            ";
+                echo "<p></p><p></p>";
+                if (isset($release_date)) {
+                    echo "<p>$release_date</p>";
+                }
+                if (isset($status)) {
+                    echo "<p>$status</p>";
+                }
                 ?>
             </div>
         </div>
         <div id="rightTop">
             <div id="rightTopTop">
                 <?php
-                echo "
-            <p><b>$title</b></p>
-            <p><image src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' id='starImage'>$vote_average/10 z $vote_count recenzji</p>
-            <p>$adult</p>
-            <form action='movieDetails.php' method='POST'>
+                if (isset($title)) {
+                    echo "<p><b>$title</b></p>";
+                }
+                if (isset($vote_average) && isset($vote_count)) {
+                    echo "<p><image src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' id='starImage'>$vote_average/10 z $vote_count recenzji</p>";
+                }
+                if (isset($adult)) {
+                    echo "<p>$adult</p>";
+                }
+                echo "<form action='movieDetails.php' method='POST'>
                 <input type='text' name='filmId' hidden='true' value='$movieID'>
                 <input type='text' name='userId' hidden='true' value='$_SESSION[user]'>
                 <button name='watchlistSubmit'>ADD TO WATCHLIST</button>
             </form>
-            <button onclick='menuTp()'>MENU</button>
-            ";
-
-
+            <button onclick='menuTp()'>MENU</button>";
                 if (isset($_POST["filmId"]) && isset($_POST["userId"]) && isset($_POST["watchlistSubmit"])) {
-
                     $server = "localhost";
                     $dbuser = "root";
                     $dbpassword = "";
                     $dbname = "katalog-filmow";
-
-
                     $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
                     $sql = "INSERT INTO `watchlist`(`userID`, `movieID`) VALUES ('$_POST[userId]','$_POST[filmId]')";
-
                     $query = mysqli_query($conn, $sql);
-
                     if ($query) {
-
                     } else {
                         mysqli_error($conn);
                     }
-
                     mysqli_close($conn);
                 }
-
                 ?>
                 <script>
                     function menuTp() {
@@ -412,65 +408,59 @@ session_start();
                 </script>
             </div>
             <div id="rightTopMiddle">
-                <p id='overview'>
-                    <?php echo $overview; ?>
-                </p>
+                <p id='overview'><?php echo isset($overview) ? $overview : ""; ?></p>
                 <div class='socials'>
                     <p>SOCIAL MEDIA:</p>
-                    <a href='https://www.imdb.com/title/<?php echo $imdb_id; ?>' target='_blank'>IMDB</a>
-                    <a href='https://www.wikidata.org/wiki/<?php echo $wikidata_id; ?>' target='_blank'>wikidata</a>
-                    <a href='https://www.facebook.com/<?php echo $facebook_id; ?>' target='_blank'>facebook</a>
-                    <a href='https://www.instagram.com/<?php echo $instagram_id; ?>' target='_blank'>instagram</a>
-                    <a href='https://twitter.com/<?php echo $twitter_id; ?>' target='_blank'>twitter</a>
+                    <a href='https://www.imdb.com/title/<?php echo isset($imdb_id) ? $imdb_id : ""; ?>'
+                        target='_blank'>IMDB</a>
+                    <a href='https://www.wikidata.org/wiki/<?php echo isset($wikidata_id) ? $wikidata_id : ""; ?>'
+                        target='_blank'>wikidata</a>
+                    <a href='https://www.facebook.com/<?php echo isset($facebook_id) ? $facebook_id : ""; ?>'
+                        target='_blank'>facebook</a>
+                    <a href='https://www.instagram.com/<?php echo isset($instagram_id) ? $instagram_id : ""; ?>'
+                        target='_blank'>instagram</a>
+                    <a href='https://twitter.com/<?php echo isset($twitter_id) ? $twitter_id : ""; ?>'
+                        target='_blank'>twitter</a>
                 </div>
             </div>
-
             <div id="rightTopBottom">
                 <div id="genres">
+                    <h1>Genres:</h1>
                     <?php
-                    echo "
-                <h1>Genres:</h1>
-                ";
-                    foreach ($nameGenre as $nameGenreFor) {
-                        echo "<p>-$nameGenreFor</p>";
+                    if (isset($nameGenre)) {
+                        foreach ($nameGenre as $nameGenreFor) {
+                            echo "<p>-$nameGenreFor</p>";
+                        }
                     }
                     ?>
                 </div>
                 <div id="prodComp">
+                    <h1>Production Companies:</h1>
                     <?php
-                    echo "
-                <h1>Production Companies:</h1>
-                ";
-                    $i = 0;
-                    foreach ($production_companies as $production_companiesFor) {
-                        $logo_pathProdComp[$i] = $production_companiesFor['logo_path'];
-                        $nameProdComp[$i] = $production_companiesFor['name'];
-
-                        echo "
-                        <p>-$nameProdComp[$i]</p>
-                        <image src='https://image.tmdb.org/t/p/original/$logo_pathProdComp[$i]' class='prodCompClass'>
-                    ";
-
+                    if (isset($production_companies)) {
+                        $i = 0;
+                        foreach ($production_companies as $production_companiesFor) {
+                            $logo_pathProdComp[$i] = $production_companiesFor['logo_path'];
+                            $nameProdComp[$i] = $production_companiesFor['name'];
+                            echo "<p>-$nameProdComp[$i]</p><image src='https://image.tmdb.org/t/p/original/$logo_pathProdComp[$i]' class='prodCompClass'>";
+                        }
                     }
                     ?>
                 </div>
                 <div id="tagline">
                     <?php
-                    echo "<p>$tagline</p>";
+                    echo isset($tagline) ? "<p>$tagline</p>" : "";
                     ?>
                 </div>
             </div>
         </div>
     </div>
-
     <div id="infoRecc">
         <div id="info">
             <?php
-            echo "
-                <p>$runtime</p>
-                <p>$budget$</p>
-                <p>$revenue$</p>
-            ";
+            echo isset($runtime) ? "<p>$runtime</p>" : "";
+            echo isset($budget) ? "<p>$budget$</p>" : "";
+            echo isset($revenue) ? "<p>$revenue$</p>" : "";
             ?>
         </div>
         <div id="Reccomendations">
@@ -479,31 +469,46 @@ session_start();
                 <?php
                 for ($i = 0; $i < 6; $i++) {
                     echo "
-                    <div class='reccomendationsDiv'>
-                        <p>-$titleReccomendations[$i]</p>
-                        <p>-$relase_dateReccomendations[$i]</p>
-                        <img src='https://image.tmdb.org/t/p/original/$poster_pathReccomendations[$i]' class='reccomendationsImageClass'>
-                    </div>
-                ";
+            <div class='reccomendationsDiv'>
+                <p>-" . (isset($titleReccomendations[$i]) ? $titleReccomendations[$i] : "") . "</p>
+                <p>-" . (isset($relase_dateReccomendations[$i]) ? $relase_dateReccomendations[$i] : "") . "</p>
+                <img src='https://image.tmdb.org/t/p/original/" . (isset($poster_pathReccomendations[$i]) ? $poster_pathReccomendations[$i] : "") . "' class='reccomendationsImageClass'>
+                <input type='text' hidden='true' value='" . (isset($id_Reccomendations[$i]) ? $id_Reccomendations[$i] : "") . "'>
+            </div>";
                 }
                 ?>
             </div>
         </div>
-
+        <script>
+            const reccDiv = document.getElementsByClassName("reccomendationsDiv");
+            const body = document.getElementById("body")
+            var myFunction = function formReccomendations(i) {
+                var input = reccDiv[i].querySelector('input[type="text"]');
+                console.log(input.value)
+                const form = document.createElement("form")
+                form.setAttribute("action", "movieDetails.php")
+                form.setAttribute("method", "POST")
+                body.appendChild(form)
+                const inputForm = document.createElement("input")
+                inputForm.setAttribute("name", "filmId")
+                inputForm.setAttribute("value", input.value)
+                form.appendChild(inputForm)
+                form.submit()
+            };
+            for (var i = 0; i < reccDiv.length; i++) {
+                reccDiv[i].addEventListener('click', myFunction.bind(this, i), false);
+            }
+        </script>
     </div>
-
     <div id="images">
         <h1>IMAGES</h1>
         <?php
         $page = 2;
         for ($i = 0; $i < $page; $i++) {
-            echo "
-        <image src='https://image.tmdb.org/t/p/original/$file_pathPosters[$i]' class='imagesClass'>
-        <image src='https://image.tmdb.org/t/p/original/$file_pathBackdrops[$i]' class='imagesClass'>
-        ";
-
+            echo "<image src='https://image.tmdb.org/t/p/original/" . (isset($file_pathPosters[$i]) ? $file_pathPosters[$i] : "") . "' class='imagesClass'>
+        <image src='https://image.tmdb.org/t/p/original/" . (isset($file_pathBackdrops[$i]) ? $file_pathBackdrops[$i] : "") . "' class='imagesClass'>";
         }
-        if ($_COOKIE["imagesNextPage"] == $i + 2) {
+        if (isset($_COOKIE["imagesNextPage"]) && $_COOKIE["imagesNextPage"] == $i + 2) {
             echo $_COOKIE["imagesNextPage"];
             $i = $_COOKIE["imagesNextPage"];
             $page = $_COOKIE["imagesNextPage"] + 2;
@@ -518,60 +523,66 @@ session_start();
                 document.cookie = `imagesNextPage=${i}`;
             }
         </script>
-
     </div>
-
     <div id="videos">
         <h1>VIDEOS</h1>
         <?php
         for ($i = 0; $i < 3; $i++) {
-            echo "
-            <iframe src='https://www.youtube.com/embed/$key[$i]' class='videoClass'></iframe>
-        ";
+            echo "<iframe src='https://www.youtube.com/embed/" . (isset($key[$i]) ? $key[$i] : "") . "' class='videoClass'></iframe>";
         }
         ?>
     </div>
-
-
     <div id="cast">
         <h1>CREATORS</h1>
         <div class="creators-container">
             <?php
-            // Loop through cast
             for ($i = 0; $i < 20; $i++) {
-                echo "
-                <div class='creatorsClass'>
+                echo "<div class='creatorsClass'>
                     <div class='image-container'>
-                        <img src='https://image.tmdb.org/t/p/original/$profile_pathCast[$i]' class='creatorsImagesClass'>
+                        <img src='https://image.tmdb.org/t/p/original/" . (isset($profile_pathCast[$i]) ? $profile_pathCast[$i] : "") . "' class='creatorsImagesClass'>
                     </div>
                     <div class='text-container'>
-                        <p>$nameCast[$i]</p>
-                        <p>$character[$i]</p>
-                        <p>$known_for_department[$i]</p>
+                        <p>" . (isset($nameCast[$i]) ? $nameCast[$i] : "") . "</p>
+                        <p>" . (isset($character[$i]) ? $character[$i] : "") . "</p>
+                        <p>" . (isset($known_for_department[$i]) ? $known_for_department[$i] : "") . "</p>
+                        <input type='text' hidden='true' value='" . (isset($id_Cast[$i]) ? $id_Cast[$i] : "") . "'>
                     </div>
-                </div>
-            ";
+                </div>";
             }
-            // Loop through crew
             for ($i = 0; $i < 10; $i++) {
-                echo "
-                <div class='creatorsClass'>
+                echo "<div class='creatorsClass'>
                     <div class='image-container'>
-                        <img src='https://image.tmdb.org/t/p/original/$profile_pathCrew[$i]' class='creatorsImagesClass'>
+                        <img src='https://image.tmdb.org/t/p/original/" . (isset($profile_pathCrew[$i]) ? $profile_pathCrew[$i] : "") . "' class='creatorsImagesClass'>
                     </div>
                     <div class='text-container'>
-                        <p>$nameCrew[$i]</p>
-                        <p>$job[$i]</p>
-                        <p>$department[$i]</p>
+                        <p>" . (isset($nameCrew[$i]) ? $nameCrew[$i] : "") . "</p>
+                        <p>" . (isset($job[$i]) ? $job[$i] : "") . "</p>
+                        <p>" . (isset($department[$i]) ? $department[$i] : "") . "</p>
+                        <input type='text' hidden='true' value='" . (isset($id_Crew[$i]) ? $id_Crew[$i] : "") . "'>
                     </div>
-                </div>
-            ";
+                </div>";
             }
             ?>
         </div>
+        <script>
+            const creatorsClass = document.getElementsByClassName("creatorsClass");
+            var myFunctionCreators = function formCreators(i) {
+                var inputCreators = creatorsClass[i].querySelector('input[type="text"]');
+                const formCreators = document.createElement("form")
+                formCreators.setAttribute("action", "peopleDetails.php")
+                formCreators.setAttribute("method", "POST")
+                body.appendChild(formCreators)
+                const inputFormCreators = document.createElement("input")
+                inputFormCreators.setAttribute("name", "peopleID")
+                inputFormCreators.setAttribute("value", inputCreators.value)
+                formCreators.appendChild(inputFormCreators)
+                formCreators.submit()
+            };
+            for (var i = 0; i < creatorsClass.length; i++) {
+                creatorsClass[i].addEventListener('click', myFunctionCreators.bind(this, i), false);
+            }
+        </script>
     </div>
-
-
     <div id="Revievs">
         <div id="writeReview">
             <form action="movieDetails.php" method="POST">
@@ -580,76 +591,51 @@ session_start();
                 <div class="rating-container">
                     <p>Rating:</p>
                     <select name="rating">
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
-                        <option value='6'>6</option>
-                        <option value='7'>7</option>
-                        <option value='8'>8</option>
-                        <option value='9'>9</option>
-                        <option value='10'>10</option>
+                        <?php
+                        for ($i = 1; $i <= 10; $i++) {
+                            echo "<option value='$i'>$i</option>";
+                        }
+                        ?>
                     </select>
                 </div>
                 <input type="text" placeholder="CONTENT" name="content">
                 <?php
-                echo "
-                <input type='text' name='username' hidden='true' value='$_SESSION[user]'>
-                <input type='text' name='filmId' hidden='true' value='$movieID'>
-            ";
+                echo "<input type='text' name='username' hidden='true' value='$_SESSION[user]'>";
+                echo "<input type='text' name='filmId' hidden='true' value='$movieID'>";
                 ?>
                 <input type="submit" value="Submit" name="submit">
             </form>
-
-
             <?php
-
             if (isset($_POST["submit"])) {
-
                 $topic = $_POST["topic"];
                 $rating = $_POST["rating"];
                 $content = $_POST["content"];
                 $username = $_POST["username"];
                 $filmId = $_POST["filmId"];
-
                 $server = "localhost";
                 $dbuser = "root";
                 $dbpassword = "";
                 $dbname = "katalog-filmow";
-
-
                 $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
                 $sql = "INSERT INTO `revievs`(`id`, `username`, `rating`,`topic`,`content`,`movieID`,`seriesID`) VALUES ('NULL','$username','$rating','$topic','$content','$filmId','NULL')";
-
                 $query = mysqli_query($conn, $sql);
-
                 if ($query) {
-
                 } else {
                     mysqli_error($conn);
                 }
-
                 mysqli_close($conn);
             }
             ?>
-
         </div>
-
         <div id="seeReviev">
             <?php
             $server = "localhost";
             $dbuser = "root";
             $dbpassword = "";
             $dbname = "katalog-filmow";
-
-
             $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
             $sql = "SELECT username,rating,topic,content,likes,dislikes,movieID FROM revievs WHERE movieID=$movieID";
-
             $query = mysqli_query($conn, $sql);
-
-
             if (mysqli_num_rows($query) > 0) {
                 while ($row = mysqli_fetch_assoc($query)) {
                     $username = $row["username"];
@@ -659,34 +645,28 @@ session_start();
                     $likes = $row["likes"];
                     $dislikes = $row["dislikes"];
                     $movieID = $row["movieID"];
-
-                    echo "
-                     <div class='revievDiv'>
+                    echo "<div class='revievDiv'>
                         <div class='revievDivLeft'>
                             <p>$username</p>
                             <p><image src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' class='imagesReviev'>$rating/10</p>
                             <p>$likes likes<image src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVGJ8vM8s-kJz-TwC9qGK509_mdB6PsLSao3X_vOTD4g&s' class='imagesReviev'></p>
                             <p>$dislikes dislikes<image src='https://p7.hiclipart.com/preview/766/140/879/5bbf5a85324c1.jpg' class='imagesReviev'></p>
-
                         </div>
-
                         <div class='revievDivRight'>
                             <h1>$topic</h1>
                             <p>$content</p>
                         </div>
-                     </div>
-                ";
+                    </div>";
                 }
-
             } else {
-                echo "<h1>NO REVIEVS WRITTEN</h1>";
+                echo "<h1>NO REVIEWS WRITTEN</h1>";
             }
-
             mysqli_close($conn);
-
             ?>
         </div>
     </div>
+
+
 
     <script>
         const options = {

@@ -1,5 +1,20 @@
 <?php
 
+
+$server = "localhost";
+$dbuser = "root";
+$dbpassword = "";
+$dbname = "katalog-filmow";
+
+$conn1 = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
+$sql1 = "TRUNCATE TABLE `katalog-filmow`.`series`";
+$query1 = mysqli_query($conn1, $sql1);
+mysqli_close($conn1);
+
+
+
+
+
 $id = 0;
 $seriesName = "";
 $popularity = 0;
@@ -31,7 +46,7 @@ function fetchData($endpoint, $params = array())
 // Fetch and display information about every TV series
 while (true) {
     $series = fetchSeries($page);
-    if (empty ($series['results'])) {
+    if (empty($series['results'])) {
         break; // No more series available
     }
 

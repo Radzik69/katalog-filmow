@@ -6,15 +6,15 @@ session_start();
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styleSeries.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styleSeries.css">
 </head>
 
-<body>
+<body id="body">
 
-    <?php
+  <?php
     if (!$_SESSION["zalogowano"] == true) {
         header('Location: ./index.php');
         exit;
@@ -180,6 +180,7 @@ session_start();
                 $poster_pathReccomendations[$i] = $resultsFor['poster_path'];
                 $nameReccomendations[$i] = $resultsFor['name'];
                 $first_air_dateReccomendations[$i] = $resultsFor['first_air_date'];
+                $id_Reccomendations[$i] = $resultsFor['id'];
                 $i++;
             }
         }
@@ -253,6 +254,7 @@ session_start();
                 $profile_pathCast[$i] = $castFor['profile_path'];
                 $character[$i] = $castFor['character'];
                 $known_for_department[$i] = $castFor['known_for_department'];
+                $id_Cast[$i] = $castFor['id'];
                 $i++;
             }
 
@@ -262,6 +264,7 @@ session_start();
                 $profile_pathCrew[$y] = $crewFor['profile_path'];
                 $job[$y] = $crewFor['job'];
                 $department[$y] = $crewFor['department'];
+                $id_Crew[$y] = $crewFor['id'];
                 $y++;
             }
         }
@@ -373,396 +376,429 @@ session_start();
     ?>
 
 
-    <div id="top">
+  <div id="top">
 
-        <div id="leftTop">
-            <div id="poster">
-                <?php
-                echo "
-    <image src='https://image.tmdb.org/t/p/original/$poster_path' id='poster'>
-    ";
-                ?>
-            </div>
-            <div id="infoTop">
-                <?php
-                echo "
-        <p></p>
-        <p></p>
-        <p>$status</p>      
-        <p>$first_air_date</p>
-        <p>$last_air_date</p>
-        <p>$number_of_episodes</p>
-        <p>$number_of_seasons</p>
-    ";
-                ?>
-            </div>
-        </div>
-        <div id="rightTop">
-            <div id="rightTopTop">
-                <?php
-                echo "
-    <p><b>$name</b></p>
-    <p><image src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' id='starImage'>$vote_average/10 z $vote_count recenzji</p>
-    <form action='movieDetails.php' method='POST'>
-        <input type='text' name='filmId' hidden='true' value='$seriesID'>
-        <input type='text' name='userId' hidden='true' value='$_SESSION[user]'>
-        <button name='watchlistSubmit'>ADD TO WATCHLIST</button>
-    </form>
-    <button onclick='menuTp()'>MENU</button>
-    ";
-
-
-                if (isset($_POST["filmId"]) && isset($_POST["userId"]) && isset($_POST["watchlistSubmit"])) {
-
-                    $server = "localhost";
-                    $dbuser = "root";
-                    $dbpassword = "";
-                    $dbname = "katalog-filmow";
-
-
-                    $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
-                    $sql = "INSERT INTO `watchlist`(`userID`, `seriesID`) VALUES ('$_POST[userId]','$_POST[filmId]')";
-
-                    $query = mysqli_query($conn, $sql);
-
-                    if ($query) {
-
-                    } else {
-                        mysqli_error($conn);
-                    }
-
-                    mysqli_close($conn);
-                }
-
-                ?>
-                <script>
-                    function menuTp() {
-                        window.location.href = "/katalog-filmow/main.php";
-                    }
-                </script>
-            </div>
-            <div id="rightTopMiddle">
-                <p id='overview'>
-                    <?php echo $overview; ?>
-                </p>
-                <div class='socials'>
-                    <p>SOCIAL MEDIA:</p>
-                    <a href='https://www.imdb.com/title/<?php echo $imdb_id; ?>' target='_blank'>IMDB</a>
-                    <a href='https://www.wikidata.org/wiki/<?php echo $wikidata_id; ?>' target='_blank'>wikidata</a>
-                    <a href='https://www.facebook.com/<?php echo $facebook_id; ?>' target='_blank'>facebook</a>
-                    <a href='https://www.instagram.com/<?php echo $instagram_id; ?>' target='_blank'>instagram</a>
-                    <a href='https://twitter.com/<?php echo $twitter_id; ?>' target='_blank'>twitter</a>
-                </div>
-            </div>
-
-            <div id="rightTopBottom">
-                <div id="genres">
-                    <?php
-                    echo "
-        <h1>Genres:</h1>
-        ";
-                    foreach ($nameGenre as $nameGenreFor) {
-                        echo "<p>-$nameGenreFor</p>";
-                    }
-                    ?>
-                </div>
-                <div id="prodComp">
-                    <?php
-                    echo "
-        <h1>Production Companies:</h1>
-        ";
-                    $i = 0;
-                    foreach ($production_companies as $production_companiesFor) {
-                        $logo_pathProdComp[$i] = $production_companiesFor['logo_path'];
-                        $nameProdComp[$i] = $production_companiesFor['name'];
-
-                        echo "
-                <p>-$nameProdComp[$i]</p>
-                <image src='https://image.tmdb.org/t/p/original/$logo_pathProdComp[$i]' class='prodCompClass'>
-            ";
-                        $i++;
-                    }
-                    ?>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- // echo "$air_dateSeasons[0]<br>";
-        // echo "$episode_countSeasons[0]<br>";
-        // echo "$nameSeasons[0]<br>";
-        // echo "$overviewSeasons[0]<br>";
-        // echo "$poster_pathSeasons[0]<br>";
-        // echo "$season_number[0]<br>";
-        // echo "$vote_averageSeasons[0]<br>"; -->
-    <div id="Reccomendations">
-        <h1>RECOMMENDATIONS:</h1>
+    <div id="leftTop">
+      <div id="poster">
         <?php
-        for ($i = 0; $i < 8; $i++) {
+        if (isset($poster_path)) {
             echo "
-                    <div class='reccomendationsDiv'>
-                        <p>-$nameReccomendations[$i]</p>
-                        <p>-$first_air_dateReccomendations[$i]</p>
-                        <img src='https://image.tmdb.org/t/p/original/$poster_pathReccomendations[$i]' class='reccomendationsImageClass'>
-                    </div>
-                ";
+                <image src='https://image.tmdb.org/t/p/original/$poster_path' id='poster'>
+            ";
         }
         ?>
-    </div>
-
-
-    <div id="seasons">
-        <h1>SEASONS:</h1>
-        <div id="seasonsDivContainer">
-            <?php
-            $i = 0;
-            foreach ($seasons as $seasonsForCSS) {
-                $air_dateSeasons[$i] = $seasonsForCSS['air_date'];
-                $episode_countSeasons[$i] = $seasonsForCSS['episode_count'];
-                $nameSeasons[$i] = $seasonsForCSS['name'];
-                $overviewSeasons[$i] = $seasonsForCSS['overview'];
-                $poster_pathSeasons[$i] = $seasonsForCSS['poster_path'];
-                $vote_average = array();
-                $vote_average[$i] = $seasonsForCSS['vote_average'];
-
-                echo "
-            <div class='seasonsDiv'>
-                <div class='posterSeasonsDiv'>
-                    <img src='https://image.tmdb.org/t/p/original/$poster_pathSeasons[$i]' class='seasonsImageClass'>
-                </div>
-                <div class='right'>
-                    <div class='seasonsDivNameNumber'>
-                        <h1>$nameSeasons[$i]</h1>
-                    </div>
-                    <div class='seasonsInfoRest'>
-                        <p class='seasonsOverview'>$overviewSeasons[$i] </p><br>
-                        <p>relase date: $air_dateSeasons[$i]</p>
-                        <p>Episode ammount: $episode_countSeasons[$i]</p>
-                        <p><img src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' class='imagesSeasons'>$vote_average[$i]/10</p>
-                    </div>
-                </div>
-            </div>
-            ";
-                $i++;
-            }
-            ?>
-        </div>
-    </div>
-
-
-
-
-    </div>
-
-    <div id="images">
-        <h1>IMAGES</h1>
+      </div>
+      <div id="infoTop">
         <?php
-        $page = 2;
-        for ($i = 0; $i < $page; $i++) {
-            echo "
-        <image src='https://image.tmdb.org/t/p/original/$file_pathPosters[$i]' class='imagesClass'>
-        <image src='https://image.tmdb.org/t/p/original/$file_pathBackdrops[$i]' class='imagesClass'>
+        echo "
+            <p>" . (isset($status) ? $status : "") . "</p>
+            <p>" . (isset($first_air_date) ? $first_air_date : "") . "</p>
+            <p>" . (isset($last_air_date) ? $last_air_date : "") . "</p>
+            <p>" . (isset($number_of_episodes) ? $number_of_episodes : "") . "</p>
+            <p>" . (isset($number_of_seasons) ? $number_of_seasons : "") . "</p>
         ";
-
-        }
-        // if ($_COOKIE["imagesNextPage"] == $i + 2) {
-        //     echo $_COOKIE["imagesNextPage"];
-        //     $i = $_COOKIE["imagesNextPage"];
-        //     $page = $_COOKIE["imagesNextPage"] + 2;
-        // }
         ?>
-        <button onclick="imagesCookie()"></button>
-        <script>
-            var i = 0;
-
-            function imagesCookie() {
-                i = i + 2;
-                document.cookie = `imagesNextPage=${i}`;
-            }
-        </script>
-
+      </div>
     </div>
-
-    <div id="videos">
-        <h1>VIDEOS</h1>
+    <div id="rightTop">
+      <div id="rightTopTop">
         <?php
-        for ($i = 0; $i < 3; $i++) {
-            echo "
-    <iframe src='https://www.youtube.com/embed/$key[$i]' class='videoClass'></iframe>
-";
-        }
-        ?>
-    </div>
-
-
-    <div id="cast">
-        <h1>CREATORS</h1>
-        <div class="creators-container">
-            <?php
-            for ($i = 0; $i < $castNumber; $i++) {
-                echo "
-            <div class='creatorsClass'>
-                <div class='image-container'>
-                    <img src='https://image.tmdb.org/t/p/original/$profile_pathCast[$i]' class='creatorsImagesClass'>
-                </div>
-                <div class='text-container'>
-                    <p>$nameCast[$i]</p>
-                    <p>$character[$i]</p>
-                    <p>$known_for_department[$i]</p>
-                </div>
-            </div>
-        ";
-            }
-            // Loop through crew
-            for ($i = 0; $i < $crewNumber; $i++) {
-                echo "
-        <div class='creatorsClass'>
-            <div class='image-container'>
-                <img src='https://image.tmdb.org/t/p/original/$profile_pathCrew[$i]' class='creatorsImagesClass'>
-            </div>
-            <div class='text-container'>
-                <p>$nameCrew[$i]</p>
-                <p>$job[$i]</p>
-                <p>$department[$i]</p>
-            </div>
-        </div>
-    ";
-            }
-            ?>
-        </div>
-    </div>
-
-
-    <div id="Revievs">
-        <div id="writeReview">
-            <form action="movieDetails.php" method="POST">
-                <h1>REVIEWS</h1>
-                <input type="text" placeholder="TOPIC" name="topic">
-                <div class="rating-container">
-                    <p>Rating:</p>
-                    <select name="rating">
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
-                        <option value='6'>6</option>
-                        <option value='7'>7</option>
-                        <option value='8'>8</option>
-                        <option value='9'>9</option>
-                        <option value='10'>10</option>
-                    </select>
-                </div>
-                <input type="text" placeholder="CONTENT" name="content">
-                <?php
-                echo "
-                <input type='text' name='username' hidden='true' value='$_SESSION[user]'>
-                <input type='text' name='filmId' hidden='true' value='$seriesID'>
-            ";
-                ?>
-                <input type="submit" value="Submit" name="submit">
+        echo "
+            <p><b>" . (isset($name) ? $name : "") . "</b></p>
+            <p><image src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' id='starImage'>" . (isset($vote_average) ? $vote_average : "") . "/10 z " . (isset($vote_count) ? $vote_count : "") . " recenzji</p>
+            <form action='movieDetails.php' method='POST'>
+                <input type='text' name='filmId' hidden='true' value='" . (isset($seriesID) ? $seriesID : "") . "'>
+                <input type='text' name='userId' hidden='true' value='$_SESSION[user]'>
+                <button name='watchlistSubmit'>ADD TO WATCHLIST</button>
             </form>
+            <button onclick='menuTp()'>MENU</button>
+        ";
 
-
-            <?php
-
-            if (isset($_POST["submit"])) {
-
-                $topic = $_POST["topic"];
-                $rating = $_POST["rating"];
-                $content = $_POST["content"];
-                $username = $_POST["username"];
-                $filmId = $_POST["filmId"];
-
-                $server = "localhost";
-                $dbuser = "root";
-                $dbpassword = "";
-                $dbname = "katalog-filmow";
-
-
-                $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
-                $sql = "INSERT INTO `revievs`(`id`, `username`, `rating`,`topic`,`content`,`movieID`,`seriesID`) VALUES ('NULL','$username','$rating','$topic','$content','NULL','$seriesID')";
-
-                $query = mysqli_query($conn, $sql);
-
-                if ($query) {
-
-                } else {
-                    mysqli_error($conn);
-                }
-
-                mysqli_close($conn);
-            }
-            ?>
-
-        </div>
-
-        <div id="seeReviev">
-            <?php
+        if (isset($_POST["filmId"]) && isset($_POST["userId"]) && isset($_POST["watchlistSubmit"])) {
             $server = "localhost";
             $dbuser = "root";
             $dbpassword = "";
             $dbname = "katalog-filmow";
 
-
             $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
-            $sql = "SELECT username,rating,topic,content,likes,dislikes,seriesID FROM revievs WHERE movieID=$seriesID";
-
+            $sql = "INSERT INTO `watchlist`(`userID`, `seriesID`) VALUES ('$_POST[userId]','$_POST[filmId]')";
             $query = mysqli_query($conn, $sql);
 
-
-            if (mysqli_num_rows($query) > 0) {
-                while ($row = mysqli_fetch_assoc($query)) {
-                    $username = $row["username"];
-                    $rating = $row["rating"];
-                    $topic = $row["topic"];
-                    $content = $row["content"];
-                    $likes = $row["likes"];
-                    $dislikes = $row["dislikes"];
-                    $seriesID = $row["seriesID"];
-
-                    echo "
-             <div class='revievDiv'>
-                <div class='revievDivLeft'>
-                    <p>$username</p>
-                    <p><image src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' class='imagesReviev'>$rating/10</p>
-                    <p>$likes likes<image src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVGJ8vM8s-kJz-TwC9qGK509_mdB6PsLSao3X_vOTD4g&s' class='imagesReviev'></p>
-                    <p>$dislikes dislikes<image src='https://p7.hiclipart.com/preview/766/140/879/5bbf5a85324c1.jpg' class='imagesReviev'></p>
-
-                </div>
-
-                <div class='revievDivRight'>
-                    <h1>$topic</h1>
-                    <p>$content</p>
-                </div>
-             </div>
-        ";
-                }
-
-            } else {
-                echo "<h1>NO REVIEVS WRITTEN</h1>";
+            if (!$query) {
+                mysqli_error($conn);
             }
 
             mysqli_close($conn);
+        }
+        ?>
+        <script>
+        function menuTp() {
+          window.location.href = "/katalog-filmow/main.php";
+        }
+        </script>
+      </div>
+      <div id="rightTopMiddle">
+        <p id='overview'>
+          <?php echo isset($overview) ? $overview : ""; ?>
+        </p>
+        <div class='socials'>
+          <p>SOCIAL MEDIA:</p>
+          <a href='https://www.imdb.com/title/<?php echo isset($imdb_id) ? $imdb_id : ""; ?>' target='_blank'>IMDB</a>
+          <a href='https://www.wikidata.org/wiki/<?php echo isset($wikidata_id) ? $wikidata_id : ""; ?>'
+            target='_blank'>wikidata</a>
+          <a href='https://www.facebook.com/<?php echo isset($facebook_id) ? $facebook_id : ""; ?>'
+            target='_blank'>facebook</a>
+          <a href='https://www.instagram.com/<?php echo isset($instagram_id) ? $instagram_id : ""; ?>'
+            target='_blank'>instagram</a>
+          <a href='https://twitter.com/<?php echo isset($twitter_id) ? $twitter_id : ""; ?>' target='_blank'>twitter</a>
+        </div>
+      </div>
 
+      <div id="rightTopBottom">
+        <div id="genres">
+          <?php
+            echo "
+                <h1>Genres:</h1>
+            ";
+            if (isset($nameGenre)) {
+                foreach ($nameGenre as $nameGenreFor) {
+                    echo "<p>-" . (isset($nameGenreFor) ? $nameGenreFor : "") . "</p>";
+                }
+            }
             ?>
         </div>
+        <div id="prodComp">
+          <?php
+            echo "
+                <h1>Production Companies:</h1>
+            ";
+            $i = 0;
+            foreach ($production_companies as $production_companiesFor) {
+                $logo_pathProdComp[$i] = $production_companiesFor['logo_path'];
+                $nameProdComp[$i] = $production_companiesFor['name'];
+
+                echo "
+                    <p>-" . (isset($nameProdComp[$i]) ? $nameProdComp[$i] : "") . "</p>
+                    <image src='https://image.tmdb.org/t/p/original/" . (isset($logo_pathProdComp[$i]) ? $logo_pathProdComp[$i] : "") . "' class='prodCompClass'>
+                ";
+                $i++;
+            }
+            ?>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- // echo "$air_dateSeasons[0]<br>";
+// echo "$episode_countSeasons[0]<br>";
+// echo "$nameSeasons[0]<br>";
+// echo "$overviewSeasons[0]<br>";
+// echo "$poster_pathSeasons[0]<br>";
+// echo "$season_number[0]<br>";
+// echo "$vote_averageSeasons[0]<br>"; -->
+  <div id="Reccomendations">
+    <h1>RECOMMENDATIONS:</h1>
+    <?php
+for ($i = 0; $i < 8; $i++) {
+    echo "
+            <div class='reccomendationsDiv'>
+                <p>-" . (isset($nameReccomendations[$i]) ? $nameReccomendations[$i] : "") . "</p>
+                <p>-" . (isset($first_air_dateReccomendations[$i]) ? $first_air_dateReccomendations[$i] : "") . "</p>
+                <img src='https://image.tmdb.org/t/p/original/" . (isset($poster_pathReccomendations[$i]) ? $poster_pathReccomendations[$i] : "") . "' class='reccomendationsImageClass'>
+                <input type='text' hidden='true' value='" . (isset($id_Reccomendations[$i]) ? $id_Reccomendations[$i] : "") . "'>
+            </div>
+        ";
+}
+?>
+    <script>
+    const reccDiv = document.getElementsByClassName("reccomendationsDiv");
+    const body = document.getElementById("body")
+
+    var myFunction = function formReccomendations(i) {
+      var input = reccDiv[i].querySelector('input[type="text"]');
+      console.log(input.value)
+
+      const form = document.createElement("form")
+      form.setAttribute("action", "seriesDetails.php")
+      form.setAttribute("method", "POST")
+      body.appendChild(form)
+
+      const inputForm = document.createElement("input")
+      inputForm.setAttribute("name", "seriesID")
+      inputForm.setAttribute("value", input.value)
+      form.appendChild(inputForm)
+
+      form.submit()
+    };
+
+    for (var i = 0; i < reccDiv.length; i++) {
+      reccDiv[i].addEventListener('click', myFunction.bind(this, i), false);
+    }
+    </script>
+  </div>
+
+
+  <div id="seasons">
+    <h1>SEASONS:</h1>
+    <div id="seasonsDivContainer">
+      <?php
+    $i = 0;
+    foreach ($seasons as $seasonsForCSS) {
+        $air_dateSeasons[$i] = $seasonsForCSS['air_date'];
+        $episode_countSeasons[$i] = $seasonsForCSS['episode_count'];
+        $nameSeasons[$i] = $seasonsForCSS['name'];
+        $overviewSeasons[$i] = $seasonsForCSS['overview'];
+        $poster_pathSeasons[$i] = $seasonsForCSS['poster_path'];
+        $vote_average = array();
+        $vote_average[$i] = $seasonsForCSS['vote_average'];
+
+        echo "
+            <div class='seasonsDiv'>
+                <div class='posterSeasonsDiv'>
+                    <img src='https://image.tmdb.org/t/p/original/" . (isset($poster_pathSeasons[$i]) ? $poster_pathSeasons[$i] : "") . "' class='seasonsImageClass'>
+                </div>
+                <div class='right'>
+                    <div class='seasonsDivNameNumber'>
+                        <h1>" . (isset($nameSeasons[$i]) ? $nameSeasons[$i] : "") . "</h1>
+                    </div>
+                    <div class='seasonsInfoRest'>
+                        <p class='seasonsOverview'>" . (isset($overviewSeasons[$i]) ? $overviewSeasons[$i] : "") . " </p><br>
+                        <p>relase date: " . (isset($air_dateSeasons[$i]) ? $air_dateSeasons[$i] : "") . "</p>
+                        <p>Episode ammount: " . (isset($episode_countSeasons[$i]) ? $episode_countSeasons[$i] : "") . "</p>
+                        <p><img src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' class='imagesSeasons'>" . (isset($vote_average[$i]) ? $vote_average[$i] : "") . "/10</p>
+                    </div>
+                </div>
+            </div>
+        ";
+        $i++;
+    }
+    ?>
+    </div>
+  </div>
+
+
+
+
+  </div>
+
+  <div id="images">
+    <h1>IMAGES</h1>
+    <?php
+$page = 2;
+for ($i = 0; $i < $page; $i++) {
+    echo "
+        <image src='https://image.tmdb.org/t/p/original/" . (isset($file_pathPosters[$i]) ? $file_pathPosters[$i] : "") . "' class='imagesClass'>
+        <image src='https://image.tmdb.org/t/p/original/" . (isset($file_pathBackdrops[$i]) ? $file_pathBackdrops[$i] : "") . "' class='imagesClass'>
+    ";
+}
+?>
+    <button onclick="imagesCookie()"></button>
+    <script>
+    var i = 0;
+
+    function imagesCookie() {
+      i = i + 2;
+      document.cookie = `imagesNextPage=${i}`;
+    }
+    </script>
+
+  </div>
+
+  <div id="videos">
+    <h1>VIDEOS</h1>
+    <?php
+for ($i = 0; $i < 3; $i++) {
+    echo "
+        <iframe src='https://www.youtube.com/embed/" . (isset($key[$i]) ? $key[$i] : "") . "' class='videoClass'></iframe>
+    ";
+}
+?>
+  </div>
+
+
+  <div id="cast">
+    <h1>CREATORS</h1>
+    <div class="creators-container">
+      <?php
+    for ($i = 0; $i < $castNumber; $i++) {
+        echo "
+            <div class='creatorsClass'>
+                <div class='image-container'>
+                    <img src='https://image.tmdb.org/t/p/original/" . (isset($profile_pathCast[$i]) ? $profile_pathCast[$i] : "") . "' class='creatorsImagesClass'>
+                </div>
+                <div class='text-container'>
+                    <p>" . (isset($nameCast[$i]) ? $nameCast[$i] : "") . "</p>
+                    <p>" . (isset($character[$i]) ? $character[$i] : "") . "</p>
+                    <p>" . (isset($known_for_department[$i]) ? $known_for_department[$i] : "") . "</p>
+                    <input type='text' hidden='true' value='" . (isset($id_Cast[$i]) ? $id_Cast[$i] : "") . "'>
+                </div>
+            </div>
+        ";
+    }
+    // Loop through crew
+    for ($i = 0; $i < $crewNumber; $i++) {
+        echo "
+            <div class='creatorsClass'>
+                <div class='image-container'>
+                    <img src='https://image.tmdb.org/t/p/original/" . (isset($profile_pathCrew[$i]) ? $profile_pathCrew[$i] : "") . "' class='creatorsImagesClass'>
+                </div>
+                <div class='text-container'>
+                    <p>" . (isset($nameCrew[$i]) ? $nameCrew[$i] : "") . "</p>
+                    <p>" . (isset($job[$i]) ? $job[$i] : "") . "</p>
+                    <p>" . (isset($department[$i]) ? $department[$i] : "") . "</p>
+                    <input type='text' hidden='true' value='" . (isset($id_Crew[$i]) ? $id_Crew[$i] : "") . "'>
+                </div>
+            </div>
+        ";
+    }
+    ?>
     </div>
 
-
     <script>
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk'
-            }
-        };
+    const creatorsClass = document.getElementsByClassName("creatorsClass");
 
-        fetch('https://api.themoviedb.org/3/tv/1399?language=en-US', options)
-            .then(response => response.json())
-            .then(response => console.log(response))
-            .catch(err => console.error(err));
+    var myFunctionCreators = function formCreators(i) {
+      var inputCreators = creatorsClass[i].querySelector('input[type="text"]');
+
+      const formCreators = document.createElement("form")
+      formCreators.setAttribute("action", "peopleDetails.php")
+      formCreators.setAttribute("method", "POST")
+      body.appendChild(formCreators)
+
+      const inputFormCreators = document.createElement("input")
+      inputFormCreators.setAttribute("name", "peopleID")
+      inputFormCreators.setAttribute("value", inputCreators.value)
+      formCreators.appendChild(inputFormCreators)
+
+      formCreators.submit()
+    };
+
+    for (var i = 0; i < creatorsClass.length; i++) {
+      creatorsClass[i].addEventListener('click', myFunctionCreators.bind(this, i), false);
+    }
     </script>
+
+  </div>
+
+
+  <div id="Revievs">
+    <div id="writeReview">
+      <form action="movieDetails.php" method="POST">
+        <h1>REVIEWS</h1>
+        <input type="text" placeholder="TOPIC" name="topic">
+        <div class="rating-container">
+          <p>Rating:</p>
+          <select name="rating">
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
+          </select>
+        </div>
+        <input type="text" placeholder="CONTENT" name="content">
+        <?php
+        echo "
+            <input type='text' name='username' hidden='true' value='$_SESSION[user]'>
+            <input type='text' name='filmId' hidden='true' value='$seriesID'>
+        ";
+        ?>
+        <input type="submit" value="Submit" name="submit">
+      </form>
+
+
+      <?php
+    if (isset($_POST["submit"])) {
+        $topic = $_POST["topic"];
+        $rating = $_POST["rating"];
+        $content = $_POST["content"];
+        $username = $_POST["username"];
+        $filmId = $_POST["filmId"];
+
+        $server = "localhost";
+        $dbuser = "root";
+        $dbpassword = "";
+        $dbname = "katalog-filmow";
+
+        $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
+        $sql = "INSERT INTO `revievs`(`id`, `username`, `rating`,`topic`,`content`,`movieID`,`seriesID`) VALUES ('NULL','$username','$rating','$topic','$content','NULL','$seriesID')";
+        $query = mysqli_query($conn, $sql);
+
+        if (!$query) {
+            mysqli_error($conn);
+        }
+
+        mysqli_close($conn);
+    }
+    ?>
+
+    </div>
+
+    <div id="seeReviev">
+      <?php
+    $server = "localhost";
+    $dbuser = "root";
+    $dbpassword = "";
+    $dbname = "katalog-filmow";
+
+    $conn = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
+    $sql = "SELECT username,rating,topic,content,likes,dislikes,seriesID FROM revievs WHERE movieID=$seriesID";
+    $query = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($query) > 0) {
+        while ($row = mysqli_fetch_assoc($query)) {
+            $username = $row["username"];
+            $rating = $row["rating"];
+            $topic = $row["topic"];
+            $content = $row["content"];
+            $likes = $row["likes"];
+            $dislikes = $row["dislikes"];
+            $seriesID = $row["seriesID"];
+
+            echo "
+                <div class='revievDiv'>
+                    <div class='revievDivLeft'>
+                        <p>$username</p>
+                        <p><image src='https://em-content.zobj.net/source/joypixels/257/glowing-star_1f31f.png' class='imagesReviev'>$rating/10</p>
+                        <p>$likes likes<image src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVGJ8vM8s-kJz-TwC9qGK509_mdB6PsLSao3X_vOTD4g&s' class='imagesReviev'></p>
+                        <p>$dislikes dislikes<image src='https://p7.hiclipart.com/preview/766/140/879/5bbf5a85324c1.jpg' class='imagesReviev'></p>
+                    </div>
+                    <div class='revievDivRight'>
+                        <h1>$topic</h1>
+                        <p>$content</p>
+                    </div>
+                </div>
+            ";
+        }
+    } else {
+        echo "<h1>NO REVIEWS WRITTEN</h1>";
+    }
+
+    mysqli_close($conn);
+    ?>
+    </div>
+  </div>
+
+
+
+  <script>
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYjE5ZWYzOTE3ZjFjNDdkNTBiZWY3YzcxY2VmNTg2ZiIsInN1YiI6IjY1ZjlmNjA1NzA2YjlmMDE3ZGQzYzgzNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QfOsMwfuL3CYzpjHPVso-na7Ft8NycFA4U5DxIpgnTk'
+    }
+  };
+
+  fetch('https://api.themoviedb.org/3/tv/1399?language=en-US', options)
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(err => console.error(err));
+  </script>
 
 </body>
 

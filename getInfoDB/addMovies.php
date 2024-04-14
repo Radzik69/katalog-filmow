@@ -1,5 +1,18 @@
 <?php
 
+$server = "localhost";
+$dbuser = "root";
+$dbpassword = "";
+$dbname = "katalog-filmow";
+
+$conn1 = mysqli_connect($server, $dbuser, $dbpassword, $dbname);
+$sql1 = "TRUNCATE TABLE `katalog-filmow`.`movies`";
+$query1 = mysqli_query($conn1, $sql1);
+mysqli_close($conn1);
+
+
+
+
 $id = 0;
 $movieName = "";
 $popularity = 0;
@@ -31,7 +44,7 @@ function fetchData($endpoint, $params = array())
 // Fetch and display information about every movie
 while (true) {
     $movies = fetchMovies($page);
-    if (empty ($movies['results'])) {
+    if (empty($movies['results'])) {
         break; // No more movies available
     }
 

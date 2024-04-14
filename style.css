@@ -131,3 +131,28 @@ grid-area: "form";
 .accountButtons{
   display: block;
 }
+
+#updateDBBody{
+  background-color: dimgray;
+}
+
+.button-container {
+  display: flex;
+}
+
+.UpdateDiv {
+  flex: 1;
+  border: 3px solid black;
+  height: 800px;
+  margin: 30px;
+}
+
+.UpdateButtons {
+  width: 100%; /* Make buttons fill the entire width of their container */
+  padding: 20px;
+  font-size: 25px;
+  border: none; /* Remove button border */
+  background-color: gray; 
+  margin-top: 50%;
+  height: 150px;
+}
