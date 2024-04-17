@@ -81,7 +81,6 @@ session_start();
                 <img class='imageSearchClass' src='https://image.tmdb.org/t/p/original/$row[poster_path]'>
                 <p class='nameSearchClass'>$row[seriesTitle]</p>
                 <input type='text' value='$row[id]' name='seriesID' id='seriesID' hidden='true'>
-                
                 </form>
               </div>
               ";

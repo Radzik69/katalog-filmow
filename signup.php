@@ -18,7 +18,7 @@ session_start();
     <form action="signup.php" method="POST">
       <input type="text" placeholder="LOGIN" name="login" class="inputIndex">
       <input type="password" name="password" placeholder="PASSWORD" class="inputIndex">
-      <input type="submit" value="LOGIN" class="inputIndex">
+      <input type="submit" value="LOGIN TO ACCOUNT" class="inputIndex">
     </form>
 
     <?php
